@@ -1,0 +1,118 @@
+<template>
+    <div class="mt-5">
+        <h1>Categories</h1>
+        <v-snackbar v-model="snackbar" :timeout="4000" top color="success">
+            <span>{{message}}</span>
+            <v-btn
+                    color="pink"
+                    flat
+                    @click="snackbar = false"
+            >
+                Close
+            </v-btn>
+        </v-snackbar>
+        <v-container>
+            <v-card>
+                <v-card-title>
+                    <h2>Manage Category</h2>
+                </v-card-title>
+                <v-card-text>
+                    <v-form class="px-3">
+                        <v-text-field label="Category" v-model="category.name"></v-text-field>
+                        <v-select
+                                :items="options"
+                                label="Status"
+                                v-model="category.status"
+                        ></v-select>
+                        <v-spacer></v-spacer>
+                        <v-btn class="warning mx-0 mt-3" v-if="editable" @click="update">Update Category</v-btn>
+                        <v-btn class="primary mx-0 mt-3" v-else @click="submit">Add Category</v-btn>
+                    </v-form>
+
+                   <v-card class="pa-4 mt-2">
+                       <v-layout row wrap>
+                           <v-flex xs6 md4>
+                               <div class="subheadline">Category</div>
+
+                           </v-flex>
+                           <v-flex xs6 md4>
+                               <div class="subheadline">Status</div>
+
+                           </v-flex>
+                           <v-flex xs6 md4>
+                               <div class="subheadline">Actions</div>
+
+                           </v-flex>
+                       </v-layout>
+                       <v-layout row wrap v-for="(category,index) in categories" :key="category.name">
+                           <v-flex xs6 md4>
+
+                               <div>{{category.name}}</div>
+                           </v-flex>
+                           <v-flex xs6 md4>
+
+                               <div>{{category.status}}</div>
+                           </v-flex>
+                           <v-flex xs6 md4>
+
+                               <v-card-actions>
+                                   <v-btn small icon>
+                                       <v-icon color="orange" @click="edit(index)">edit</v-icon>
+                                   </v-btn>
+                                   <v-btn small icon>
+                                       <v-icon color="red">delete</v-icon>
+                                   </v-btn>
+                               </v-card-actions>
+                           </v-flex>
+                           <v-divider></v-divider>
+                       </v-layout>
+                   </v-card>
+                </v-card-text>
+            </v-card>
+        </v-container>
+    </div>
+</template>
+
+<script>
+    export default {
+        name: "Categories",
+        data(){return{
+            category:{name:null,status:null},
+            options:['Active', 'Suspended','Not Active'],
+            categories:[
+                {name:'Income',status:'Active'},
+                {name:'Emergency Fund',status:'Active'},
+                {name:'Housing',status:'Active'},
+                {name:'Installment',status:'Active'},
+                {name:'Black Tax',status:'Active'},
+                {name:'Savings',status:'Active'},
+                {name:'Health Care',status:'Suspended'},
+                {name:'Consumer Debt',status:'Active'},
+
+            ],
+            editable:false,
+            message:null,
+            snackbar:false
+        }},
+        methods:{
+            edit(i){
+                this.editable = true
+                this.category = this.categories[i]
+            },
+            update(){
+                this.editable = false
+                this.category = {name:null,status:null}
+                this.message = "Category Successfully updated"
+                this.snackbar = true
+            },
+            submit(){
+                this.message = "Category Successfully Added"
+                this.snackbar = true
+            }
+        }
+    }
+</script>
+
+<style scoped>
+
+</style>
