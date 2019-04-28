@@ -2212,34 +2212,57 @@ __webpack_require__.r(__webpack_exports__);
       pagination: {
         current: 1,
         total: 0
-      }
+      },
+      index: null
     };
   },
   methods: {
     edit: function edit(i) {
       this.editable = true;
       this.category = this.categories[i];
+      this.index = i;
     },
     update: function update() {
-      this.editable = false;
-      this.category = {
-        name: null,
-        status: null
-      };
-      this.message = "Category Successfully updated";
-      this.snackbar = true;
-    },
-    submit: function submit() {
-      this.message = "Category Successfully Added";
-      this.snackbar = true;
-    },
-    get_categories: function get_categories() {
       var _this = this;
 
+      axios.put('/api/categories/' + this.categories[this.index].id, this.category).then(function (response) {
+        _this.editable = false;
+        _this.category = {
+          name: null,
+          status: null
+        };
+        _this.message = response.data.message;
+        _this.snackbar = true;
+      });
+    },
+    submit: function submit() {
+      var _this2 = this;
+
+      axios.post('/api/categories', this.category).then(function (response) {
+        _this2.categories.push(response.data);
+
+        _this2.message = "Category Successfully Added";
+        _this2.snackbar = true;
+      });
+    },
+    destroy: function destroy(i) {
+      var _this3 = this;
+
+      axios["delete"]('/api/categories/' + this.categories[i].id).then(function (response) {
+        _this3.message = response.data.message;
+
+        _this3.categories.splice(i, 1);
+
+        _this3.snackbar = true;
+      });
+    },
+    get_categories: function get_categories() {
+      var _this4 = this;
+
       axios.get('/api/categories?page=' + this.pagination.current).then(function (response) {
-        _this.categories = response.data.data;
-        _this.pagination.current = response.data.meta.current_page;
-        _this.pagination.total = response.data.meta.last_page;
+        _this4.categories = response.data.data;
+        _this4.pagination.current = response.data.meta.current_page;
+        _this4.pagination.total = response.data.meta.last_page;
       });
     },
     onPageChange: function onPageChange() {
@@ -71428,7 +71451,14 @@ var render = function() {
                                       [
                                         _c(
                                           "v-icon",
-                                          { attrs: { color: "red" } },
+                                          {
+                                            attrs: { color: "red" },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.destroy(index)
+                                              }
+                                            }
+                                          },
                                           [_vm._v("delete")]
                                         )
                                       ],

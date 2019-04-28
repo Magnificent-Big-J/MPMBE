@@ -40,7 +40,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $category = $this->validate($request,[
-            'name'=>'required|min:3',
+            'name'=>'required|min:3|unique:categories',
             'status'=>'required|min:3',
         ]);
 
@@ -84,7 +84,7 @@ class CategoryController extends Controller
 
 
          $this->validate($request,[
-            'name'=>'required|min:3',
+            'name'=>'required|min:3|unique:categories,name,'. $category->id,
             'status'=>'required|min:3',
         ]);
         $category = Category::findOrFail($category->id);
@@ -93,7 +93,7 @@ class CategoryController extends Controller
         $category->save();
 
 
-        return new CategoryResource($category) ;
+        return response()->json(['category'=>new CategoryResource($category),'message'=>'Successfully Updated'],200) ;
     }
 
     /**
@@ -104,7 +104,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $category = Category::findOrFail($category->id);
+
 
         $category->delete();
 

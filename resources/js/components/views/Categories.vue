@@ -60,7 +60,7 @@
                                        <v-icon color="orange" @click="edit(index)">edit</v-icon>
                                    </v-btn>
                                    <v-btn small icon>
-                                       <v-icon color="red">delete</v-icon>
+                                       <v-icon color="red" @click="destroy(index)">delete</v-icon>
                                    </v-btn>
                                </v-card-actions>
                            </v-flex>
@@ -93,22 +93,39 @@
             pagination:{
                 current:1,
                 total:0
-            }
+            },
+            index:null
         }},
         methods:{
             edit(i){
                 this.editable = true
                 this.category = this.categories[i]
+                this.index = i
             },
             update(){
-                this.editable = false
-                this.category = {name:null,status:null}
-                this.message = "Category Successfully updated"
-                this.snackbar = true
+               axios.put('/api/categories/'+ this.categories[this.index].id,this.category)
+                   .then((response)=>{
+                       this.editable = false
+                       this.category = {name:null,status:null}
+                       this.message = response.data.message
+                       this.snackbar = true
+                   })
             },
             submit(){
-                this.message = "Category Successfully Added"
-                this.snackbar = true
+                axios.post('/api/categories',this.category)
+                    .then((response)=>{
+                        this.categories.push(response.data)
+                        this.message = "Category Successfully Added"
+                        this.snackbar = true
+                    })
+            },
+            destroy(i){
+                axios.delete('/api/categories/'+this.categories[i].id)
+                    .then((response)=>{
+                        this.message = response.data.message
+                        this.categories.splice(i,1)
+                        this.snackbar = true
+                    })
             },
             get_categories(){
                 axios.get('/api/categories?page='+this.pagination.current)
