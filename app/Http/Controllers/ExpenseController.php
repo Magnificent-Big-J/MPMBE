@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Expense;
+use App\Http\Resources\ExpenseResource;
 use Illuminate\Http\Request;
 
 class ExpenseController extends Controller
@@ -14,7 +15,9 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        //
+        $expenses = Expense::paginate(10);
+
+        return ExpenseResource::collection($expenses);
     }
 
     /**
@@ -35,7 +38,25 @@ class ExpenseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $this->validate($request,[
+            'name'=>'required',
+            'category_id'=>'required',
+            'amount'=>'required',
+            'status'=>'required',
+            'expense_date'=>'required',
+        ]);
+
+        $expense = Expense::create([
+                'expense'=> $request->name,
+                'category_id'=> $request->category_id,
+                'amount'=> $request->amount,
+                'status'=> $request->status,
+                'expense_date'=> $request->expense_date,
+                'user_id'=>1
+        ]);
+
+        return response()->json(['expense'=>new ExpenseResource($expense),'message'=>'Successfully Created']);
     }
 
     /**
@@ -69,7 +90,21 @@ class ExpenseController extends Controller
      */
     public function update(Request $request, Expense $expense)
     {
-        //
+        $this->validate($request,[
+            'name'=>'required',
+            'category_id'=>'required',
+            'amount'=>'required',
+            'status'=>'required',
+            'expense_date'=>'required',
+        ]);
+        $expense->update([
+            'expense'=>$request->name,
+            'expense'=>$request->name,
+            'category_id'=>$request->category_id,
+            'expense_date'=>$request->expense_date,
+            'status'=>$request->status,
+        ]);
+        return response()->json(['expense'=>new ExpenseResource($expense),'message'=>'Successfully Updated']);
     }
 
     /**
@@ -80,6 +115,7 @@ class ExpenseController extends Controller
      */
     public function destroy(Expense $expense)
     {
-        //
+        $expense->delete();
+        return response()->json(['message'=>'Successfully Deleted']);
     }
 }

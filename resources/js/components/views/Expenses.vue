@@ -20,7 +20,10 @@
                         <v-select
                                 :items="categories"
                                 label="Category"
-                                v-model="expense.category"
+                                v-model="expense.category_id"
+                                item-text="name"
+                                item-value="id"
+                                autocimplete
                         ></v-select>
                         <v-select
                                 :items="options"
@@ -28,6 +31,10 @@
                                 v-model="expense.status"
                         ></v-select>
                         <v-text-field label="Amount" v-model="expense.amount"></v-text-field>
+                        <v-menu>
+                            <v-text-field :value="expense.expense_date"  slot="activator" label="Expense Date" prepend-icon="date_range"></v-text-field>
+                            <v-date-picker v-model="expense.expense_date" ></v-date-picker>
+                        </v-menu>
                         <v-spacer></v-spacer>
                         <v-btn class="info mx-0 mt-3" v-if="editable" @click="update">Update Expense</v-btn>
                         <v-btn class="primary mx-0 mt-3" v-else @click="submit">Add Expense</v-btn>
@@ -93,12 +100,19 @@
                                     <v-icon color="orange" @click="edit(index)">edit</v-icon>
                                 </v-btn>
                                 <v-btn small icon>
-                                    <v-icon color="red">delete</v-icon>
+                                    <v-icon color="red" @click="destroy(index)">delete</v-icon>
                                 </v-btn>
                             </v-card-actions>
                         </v-flex>
                         <v-divider></v-divider>
                     </v-layout>
+                    <v-card-actions>
+                        <v-pagination
+                                v-model="pagination.current"
+                                :length="pagination.total"
+                                @input="onPageChange"
+                        ></v-pagination>
+                    </v-card-actions>
                 </v-card>
 
             </v-card>
@@ -110,23 +124,19 @@
     export default {
         name: "Expenses",
         data(){return{
-            expenses:[
-                {name:'Car Insurance',category:'Installment',amount:'1523',status:'paid'},
-                {name:'House Hold 1',category:'Black Tax',amount:'1000',status:'paid'},
-                {name:'House Hold 2',category:'Installment',amount:'1000',status:'paid'},
-                {name:'Food and Groceries',category:'Installment',amount:'1523',status:'outstanding'},
-                {name:'Helper',category:'Consumer Debt',amount:'800',status:'onprogress'},
-                {name:'Car',category:'Consumer Debt',amount:'5000',status:'paid'},
-                {name:'Petrol',category:'Consumer Debt',amount:'3000',status:'paid'},
-                {name:'Medical Aid',category:'Health Care',amount:'1523',status:'paid'},
-                {name:'Pension Fund',category:'Savings',amount:'1523',status:'paid'},
-            ],
-            expense:{name:null,category:null,amount:null,status:null},
-            options:['Active', 'Suspended','Not Active'],
-            categories:['Income','Emergency Fund','Housing','Installment','Black Tax','Savings','Health Care','Consumer Debt','Unplanned'],
+            expenses:[],
+            expense:{name:null,category_id:null,amount:null,status:null,expense_date:null},
+            options:['Paid', 'Onprogress','Outstanding'],
+            categories:{},
             editable:false,
             snackbar:false,
-            message:null
+            message:null,
+            errors:{},
+            index:null,
+            pagination:{
+                current:1,
+                total:0
+            }
         }},
         methods:{
             edit(i){
@@ -134,16 +144,64 @@
                 this.expense = this.expenses[i]
             },
             update(){
-                this.editable = false
-                this.expense = {name:null,status:null}
-                this.message = "Expense Successfully updated"
-                this.snackbar = true
+
+                axios.put('/api/expenses/'+this.expense.id,this.expense)
+                    .then((response)=>{
+                        this.editable = false
+                        this.message = response.data.message
+                        this.expenses[this.index] = response.data.expense
+                        this.index = null
+                        this.snackbar = true
+                    })
+
             },
-            submit(){
-                this.message = "Expense Successfully Added"
-                this.expenses.push(this.expense)
-                this.snackbar = true
+            destroy(i){
+                axios.delete('/api/categories/'+this.expenses[i].id)
+                    .then((response)=>{
+                        this.snackbar = true
+                        this.message = response.data.message
+                        this.expenses.splice(i,1)
+                        this.expense = {name:null,id:null,amount:null,status:null,expense_date:null}
+                    })
             }
+            ,
+            submit(){
+
+
+                axios.post('/api/expenses',this.expense)
+                    .then((response)=>{
+                        this.message = response.data.message
+                        this.expenses.push(response.data.expense)
+                        this.snackbar = true
+                        this.expense = {name:null,id:null,amount:null,status:null,expense_date:null}
+                    })
+                    .catch((error)=>{
+                        this.errors = error.response.data.errors
+                    })
+
+            },
+            get_expenses(){
+                axios.get('/api/expenses?page='+this.pagination.current)
+                    .then((response)=>{
+                        this.expenses = response.data.data
+                        this.pagination.current = response.data.meta.current_page
+                        this.pagination.total = response.data.meta.last_page
+                    })
+            },
+            get_categories(){
+                axios.get('/api/getList ')
+                    .then((response)=>{
+                        this.categories = response.data.data
+
+                    })
+            }            ,
+            onPageChange(){
+                this.get_expenses()
+            }
+        },
+        created(){
+            this.get_expenses()
+            this.get_categories()
         }
     }
 </script>

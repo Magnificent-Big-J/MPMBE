@@ -21,7 +21,10 @@ class VacationResource extends JsonResource
             'end'=>$this->end_date,
             'status'=>$this->status,
             'activities'=> unserialize($this->activities),
-            'duration'=> \Carbon\Carbon::parse($this->start_date)->diffInDays($this->end_date)
+            'duration'=> \Carbon\Carbon::parse($this->start_date)->diffInDays($this->end_date),
+            'cost'=> $this->cost,
+            'children'=> $this->childrens,
+            'adults'=> $this->adults,
         ];
     }
 }

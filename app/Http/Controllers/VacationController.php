@@ -15,7 +15,7 @@ class VacationController extends Controller
      */
     public function index()
     {
-        $vacations = Vacation::paginate(6);
+        $vacations = Vacation::paginate(4);
 
         return VacationResource::collection($vacations);
     }
@@ -46,7 +46,7 @@ class VacationController extends Controller
             'end'=>'required',
             'cost'=>'required',
             'adults'=>'required',
-            'childrens'=>'required',
+            'children'=>'required',
             'activities'=>'required',
         ]);
 
@@ -58,11 +58,11 @@ class VacationController extends Controller
             'cost'=>$request->cost,
             'status'=>$request->status,
             'adults'=>$request->adults,
-            'childrens'=>$request->childrens,
+            'childrens'=>$request->children,
             'user_id'=>1
         ]);
 
-        return new VacationResource($vacation);
+        return response()->json(['vacation'=>new VacationResource($vacation),'message'=>'Successfully Created'],200);
 
     }
 
@@ -104,7 +104,7 @@ class VacationController extends Controller
             'end'=>'required',
             'cost'=>'required',
             'adults'=>'required',
-            'childrens'=>'required',
+            'children'=>'required',
             'activities'=>'required',
         ]);
         $vacation->destination = $request->destination;
@@ -114,11 +114,11 @@ class VacationController extends Controller
         $vacation->cost = $request->cost;
         $vacation->status = $request->status;
         $vacation->adults = $request->adults;
-        $vacation->childrens = $request->childrens;
+        $vacation->childrens = $request->children;
         $vacation->user_id= 1;
         $vacation->save();
 
-        return response()->json(['vacation'=>$vacation],200);
+        return response()->json(['vacation'=> new VacationResource($vacation),'message'=>'Successfully Updated'],200);
     }
 
     /**
@@ -129,7 +129,7 @@ class VacationController extends Controller
      */
     public function destroy(Vacation $vacation)
     {
-        $vacation = Vacation::findOrFail($vacation->id);
+
         $vacation->delete();
 
         return response()->json(['message'=>'Successfully Deleted'],200);

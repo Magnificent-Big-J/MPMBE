@@ -192,5 +192,221 @@
             </div>
 
         </div>
+
+
+    <div class="col-md-12">
+        <div class="box">
+            <div class="imgBx">
+                <img src="icons/Linkability_icon_11.png">
+            </div>
+            <div class="content">
+                <h2>Temporary Employment Services in South Africa</h2>
+                <p>While post-Apartheid South Africa has
+                    witnessed steady albeit unspectacular
+                    economic growth, we remain an economy with
+                    extraordinarily high unemployment rates.
+                    Employment has however grown, at a similarly
+                    low rate to economic growth
+                    <br><br><br>
+
+                    … READ MORE
+
+
+                </p>
+
+            </div>
+            <div class="imgBx">
+                <img src="icons/Linkability_icon_10.png">
+            </div>
+            <div class="content">
+                <h2>10 Communication Secrets of Great
+                    Leaders</h2>
+                <p>No one ever became a great leader without
+                    first becoming a great communicator.
+                    Great leaders connect with people on an
+                    emotional level every time they speak. Their
+                    words inspire others to achieve more than they
+                    ever thought possible
+                    <br><br><br>
+
+                    … READ MORE
+
+
+                </p>
+
+            </div>
+
+
+        </div>
+        <br>
+        <section>
+            <div class="bottom">
+                <h1>
+                    matching talent to opportunities
+                </h1>
+
+            </div>
+
+        </section>
+
+    </div>
     </body>
 </html>
+
+
+
+
+<div class="col-md-12">
+    <div class="box">
+        <div class="imgBx">
+            <img src="icons/Linkability_icon_11.png">
+        </div>
+        <div class="content">
+            <h2>Temporary Employment Services in South Africa</h2>
+            <p>While post-Apartheid South Africa has
+                witnessed steady albeit unspectacular
+                economic growth, we remain an economy with
+                extraordinarily high unemployment rates.
+                Employment has however grown, at a similarly
+                low rate to economic growth
+                <br><br><br>
+
+                … READ MORE
+
+
+            </p>
+
+        </div>
+        <div class="imgBx">
+            <img src="icons/Linkability_icon_10.png">
+        </div>
+        <div class="content">
+            <h2>10 Communication Secrets of Great
+                Leaders</h2>
+            <p>No one ever became a great leader without
+                first becoming a great communicator.
+                Great leaders connect with people on an
+                emotional level every time they speak. Their
+                words inspire others to achieve more than they
+                ever thought possible
+                <br><br><br>
+
+                … READ MORE
+
+
+            </p>
+
+        </div>
+
+
+    </div>
+    <br>
+    <section>
+        <div class="bottom">
+            <h1>
+                matching talent to opportunities
+            </h1>
+
+        </div>
+
+    </section>
+
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="main">
+            <div class="col-md-12">
+
+                <h4 class="text-center home-content-h1">LINKABILITY</h4>
+                <div class="home-top-content ml-5 mr-5">
+                    <p>Linkability is designed to provide a cost-effective and simple solution for any business by focusing on the following:</p>
+                    <ul>
+                        <li>linkability <b>simplifies</b> access to people with disabilities</li>
+                        <li>linkability <b>matches</b> people with disabilities to job and skills development opportunities</li>
+                        <li>linkability <b>assesses</b> skill, qualifications and experience against job and training requirements</li>
+                        <li>linkability <b>recommends</b> suitable candidates for interviewing</li>
+                        <li>linkability <b>tracks</b> the recruitment and selection process</li>
+                        <li>linkability <b>improves</b> awareness of disability related matters</li>
+                        <li>linkability <b>teaches</b> employers how to become an “employer of choice”</li>
+                    </ul>
+                    <p>
+                        Linkability is a Siyakha Implementation Partners product. For the past 20 years, Siyakha has driven transformation
+                        initiatives across various industries in South Africa. Our goal is about more than just ticking the compliance box, but
+                        rather about sustainable transformation which ultimately makes your business more successful and an “employer of
+                        choice”.
+                    </p>
+                </div>
+                <div class="col-md-12">
+                    <div class="home-job-search">
+                        <div class="search-content">
+                            <span id="color-white">SEARCH JOBS</span>
+                            <form class="form-inline ">
+                                <div class="breath-down">
+                                    <input type="text"  id="inputPassword2" placeholder="Job title. Skill or Company">
+                                </div>
+                                <div class="breath-left breath-down">
+
+                                    <input type="text"  id="inputPassword2" placeholder="Pretoria or City">
+                                </div>
+                                <div class="breath-left breath-down">
+                                    <input type="submit"  value="GO !">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-8 offset-2">
+            <h2>quick links</h2>
+        </div>
+    </div>
+    <div class="row rows">
+        <div class="col">
+            <p class="p-top">
+                <img src="http://recruitment.siyakha.io/images/linkability/Linkability_icon_9.png">
+            </p>
+            <p class="p-bottom">
+                COMMERCIAL RECRUITMENT
+            </p>
+
+        </div>
+        <div class="col with-borders">
+            <p class="p-top">
+                <img src="http://recruitment.siyakha.io/images/linkability/Linkability_icon_8.png">
+            </p>
+            <p class="p-bot">FINANCIAL SECTOR RECRUITMENT</p>
+        </div>
+        <div class="col">                    <p class="p-top">
+                <img src="http://recruitment.siyakha.io/images/linkability/Linkability_icon_7.png">
+            </p>
+            <p class="p-bot">ENGINEERING RECRUITMENT</p>
+        </div>
+        <div class="col">
+            <p class="p-top">
+                <img src="http://recruitment.siyakha.io/images/linkability/Linkability_icon_6.png">
+            </p>
+            <p class="p-bot">IT & TELECOMS RECRUITMENT</p>
+        </div>
+        <div class="col">
+            <p class="p-top">
+                <img src="http://recruitment.siyakha.io/images/linkability/Linkability_icon_5.png">
+            </p>
+            <p class="p-bot">EXECUTIVE RECRUITMENT</p>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-8 offset-2">
+            <h2 class="black">tips and tricks for your next interview</h2>
+        </div>
+
+    </div>
+    <div class="row">
+
+    </div>
+</div>

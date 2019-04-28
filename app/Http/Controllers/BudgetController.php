@@ -53,7 +53,7 @@ class BudgetController extends Controller
             'user_id'=> 1,
         ]);
 
-        return response()->json(['budget'=>$budget],200);
+        return response()->json(['budget'=>$budget,'message'=>'Successfully Created'],200);
     }
 
     /**
@@ -88,9 +88,11 @@ class BudgetController extends Controller
     public function update(Request $request, Budget $budget)
     {
 
+
+
         $budget = Budget::findOrFail($budget->id);
 
-        $request->validate([
+        $this->validate($request,[
             'amount'=>['required'],
             'date'=>['required'],
             'income'=>['required'],
@@ -103,7 +105,7 @@ class BudgetController extends Controller
         $budget->budget_date = $request->date;
         $budget->save();
 
-        return response()->json(['budget'=> new BudgetResource($budget)],200);
+        return response()->json(['budget'=> new BudgetResource($budget),'message'=>'Successfully Updated'],200);
 
 
     }
@@ -116,7 +118,7 @@ class BudgetController extends Controller
      */
     public function destroy(Budget $budget)
     {
-        $budget = Budget::find($budget->id);
+
         $budget->delete();
 
         return response()->json(['message'=>'Successfully Delete'],200);

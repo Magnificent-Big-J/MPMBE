@@ -62,19 +62,19 @@
                     <v-layout row wrap class="pa-3">
                         <v-flex xs12 sm4 md4>
                             <v-checkbox
-                                    v-model="vacation.activies"
+                                    v-model="vacation.activities"
                                     label="Culture"
                                     value="Culture"
                                     hide-details
                             ></v-checkbox>
                             <v-checkbox
-                                    v-model="vacation.activies"
+                                    v-model="vacation.activities"
                                     label="Outdours"
                                     value="Outdours"
                                     hide-details
                             ></v-checkbox>
                             <v-checkbox
-                                    v-model="vacation.activies"
+                                    v-model="vacation.activities"
                                     label="Shopping"
                                     value="Shopping"
                                     hide-details
@@ -82,19 +82,19 @@
                         </v-flex>
                         <v-flex xs12 sm4 md4>
                             <v-checkbox
-                                    v-model="vacation.activies"
+                                    v-model="vacation.activities"
                                     label="Relaxing"
                                     value="Relaxing"
                                     hide-details
                             ></v-checkbox>
                             <v-checkbox
-                                    v-model="vacation.activies"
+                                    v-model="vacation.activities"
                                     label="Beaches"
                                     value="Beaches"
                                     hide-details
                             ></v-checkbox>
                             <v-checkbox
-                                    v-model="vacation.activies"
+                                    v-model="vacation.activities"
                                     label="Wildlife"
                                     value="Wildlife"
                                     hide-details
@@ -102,20 +102,20 @@
                         </v-flex>
                         <v-flex xs12 sm4 md4>
                             <v-checkbox
-                                    v-model="vacation.activies"
+                                    v-model="vacation.activities"
                                     label="Historic Sites"
                                     value="Historic Sites"
                                     hide-details
                             ></v-checkbox>
 
                             <v-checkbox
-                                    v-model="vacation.activies"
+                                    v-model="vacation.activities"
                                     label="Museums"
                                     value="Museums"
                                     hide-details
                             ></v-checkbox>
                             <v-checkbox
-                                    v-model="vacation.activies"
+                                    v-model="vacation.activities"
                                     label="Romantic"
                                     value="Romantic"
                                     hide-details
@@ -124,7 +124,8 @@
 
                     </v-layout>
                     <v-card-actions>
-                        <v-btn color="info" @click="submit">Add Vacation</v-btn>
+                        <v-btn color="info" v-if="editable" @click="update">Update</v-btn>
+                        <v-btn color="info" v-else @click="submit">Add Vacation</v-btn>
                     </v-card-actions>
 
                 </v-form>
@@ -168,7 +169,7 @@
                                     </v-flex>
                                     <v-flex xs12>
                                         <div class="subheading">
-                                            <v-icon left>waves</v-icon> <span v-for="activity in vacation.activies" :key="activity">{{activity}} |</span>
+                                            <v-icon left>waves</v-icon> <span v-for="(activity,i) in vacation.activities" >{{activity}} |</span>
                                         </div>
                                     </v-flex>
                                 </v-layout>
@@ -189,6 +190,13 @@
                         <v-divider></v-divider>
                     </v-flex>
                 </v-layout>
+                <v-card-actions>
+                    <v-pagination
+                            v-model="pagination.current"
+                            :length="pagination.total"
+                            @input="onPageChange"
+                    ></v-pagination>
+                </v-card-actions>
             </v-container>
 
 
@@ -201,37 +209,74 @@
         name: "Vacations",
         data(){return{
             vacations:[
-                {destination:"Thailand",start:'2019-12-21',end:'2019-12-28',duration:6,adults:2,children:0,activies:['Culture', 'Outdours','Relaxing','Romantic','Beaches','Historic Sites','Museums','Shopping','Wildlife'],cost:30000,status:'Going'},
-                {destination:"Mauritius",start:'2019-05-03',end:'2019-03-06',duration:3,adults:2,children:0,activies:['Culture', 'Outdours','Relaxing','Romantic','Beaches','Wildlife'],cost:20000,status:'New'},
-                {destination:"Durban",start:'2019-11-04',end:'2019-11-06',duration:2,adults:2,children:1,activies:['Culture', 'Outdours','Relaxing','Romantic','Beaches','Wildlife','Museums'],cost:15000,status:'New'},
-                {destination:"Cape Town",start:'2019-08-11',end:'2019-09-19',duration:8,adults:2,children:1,activies:['Culture', 'Outdours','Relaxing','Romantic','Beaches','Wildlife','Museums'],cost:20000,status:'New'},
-                  ],
-            vacation:{destination:null,start:null,end:null,adults:null,children:null,activies:[],cost:null,status:null},
+                   ],
+            vacation:{destination:null,start:null,end:null,adults:null,children:null,activities:[],cost:null,status:null},
             options:['Going', 'New','Cancelled'],
             editable:false,
             snackbar:false,
-            message:null
+            message:null,
+            errors:{},
+            index:null,
+            pagination:{
+                current:1,
+                total:0
+            }
 
         }},
         methods:{
             edit(i){
                 this.editable = true
                 this.vacation = this.vacations[i]
+                this.index = i
             },
             update(){
-                this.editable = false
-                this.vacation = {destination:null,start:null,end:null,adults:null,children:null,activies:['Culture', 'Outdours','Relaxing','Romantic','Beaches','Historic Sites','Museums','Shopping','Wildlife'],cost:null}
-                this.message = "Expense Successfully updated"
-                this.snackbar = true
+
+                axios.put('/api/vacations/'+this.vacation.id,this.vacation)
+                    .then((response)=>{
+                        this.editable = false
+                        this.vacation = {destination:null,start:null,end:null,adults:null,children:null,activities:[],cost:null}
+                        this.message = response.data.message
+                        this.vacations[this.index] = response.data.vacation
+                        this.snackbar = true
+                    })
+
             },
             submit(){
                 this.message = "Expense Successfully Added"
-                this.vacations.push(this.vacation)
-                this.snackbar = true
+                axios.post('/api/vacations',this.vacation)
+                    .then((response)=>{
+                        this.vacations.push(response.data.vacation)
+                        this.message = response.data.message
+                        this.snackbar = true
+                        this.vacation = {destination:null,start:null,end:null,adults:null,children:null,activities:[],cost:null}
+                    })
+                    .catch((errors)=>{
+                        this.errors = errors.response.data
+                    })
+
             },
             destroy(i){
-                this.vacations.splice(i,1)
+                axios.delete('/api/vacations/'+this.vacations[i].id)
+                    .then((response)=>{
+                        this.vacations.splice(i,1)
+                        this.message = response.message
+                    })
+
+            },
+            get_vacations(){
+                axios.get('/api/vacations?page='+this.pagination.current)
+                    .then((response)=>{
+                        this.vacations = response.data.data
+                        this.pagination.current = response.data.meta.current_page
+                        this.pagination.total = response.data.meta.last_page
+                    })
+            },
+            onPageChange(){
+                this.get_vacations()
             }
+        },
+        created() {
+            this.get_vacations()
         }
     }
 </script>

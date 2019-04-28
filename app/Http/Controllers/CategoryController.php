@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Http\Resources\CategoryResource;
 use Illuminate\Http\Request;
-use mysql_xdevapi\Collection;
+
 
 class CategoryController extends Controller
 {
@@ -110,5 +110,9 @@ class CategoryController extends Controller
 
         return response()->json(['message'=>'Category Successfully Deleted'],200);
 
+    }
+    public function get_categories(){
+
+        return CategoryResource::collection(Category::latest()->get());
     }
 }

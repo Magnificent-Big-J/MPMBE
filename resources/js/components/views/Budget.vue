@@ -31,8 +31,8 @@
                                    <v-text-field label="Savings" v-model="budget.savings" prepend-icon="money"></v-text-field>
                                </v-flex>
                            </v-layout>
-                           <v-btn color="warning" v-if="editable">Update</v-btn>
-                           <v-btn color="info" v-else>Add</v-btn>
+                           <v-btn color="warning" v-if="editable" @click="update">Update</v-btn>
+                           <v-btn color="info" v-else @click="submit">Add</v-btn>
 
                        </v-form>
                         <v-card class="mt-2 pa-4" >
@@ -100,6 +100,13 @@
                                 </v-flex>
                                 <v-divider></v-divider>
                             </v-layout>
+                            <v-card-actions>
+                                <v-pagination
+                                    v-model="pagination.current"
+                                    :length="pagination.total"
+                                    @input="onPageChange"
+                                ></v-pagination>
+                            </v-card-actions>
                         </v-card>
                     </v-card-text>
                 </v-card>
@@ -112,37 +119,73 @@
         name: "Budget",
         data(){return{
             budget:{amount:null,date:null,income:null,savings:null},
-            budgets:[
-                {amount:23000,date:'2019-01-30',income:40000,savings:10000},
-                {amount:22000,date:'2019-02-28',income:40000,savings:11000},
-                {amount:21000,date:'2019-03-30',income:40000,savings:12000},
-                {amount:23000,date:'2019-04-30',income:40000,savings:10000},
-            ],
+            budgets:[],
             snackbar:false,
             message:null,
-            editable:false
+            editable:false,
+            errors:{},
+            index:null,
+            pagination:{
+                current:1,
+                total:0
+            }
         }},
         methods:{
             edit(i){
                 this.editable = true
                 this.budget = this.budgets[i]
+                this.index = i
             },
             update(){
-                this.editable = false
-                this.budget = {amount:null,date:null,income:null,savings:null}
-                this.message = "Budget Successfully updated"
-                this.snackbar = true
+                axios.put('/api/budgets/'+this.budgets[this.index].id,this.budget)
+                    .then((response)=>{
+                        this.editable = false
+                        this.budget = {amount:null,date:null,income:null,savings:null}
+                        this.message = response.data.message
+                        this.snackbar = true
+                        this.budgets[this.index] = response.data.budget
+                    })
+
             },
             submit(){
-                this.message = "Budget Successfully Added"
-                this.snackbar = true
+
+                axios.post('/api/budgets',this.budget)
+                    .then((response)=>{
+                        this.message = response.data.message
+                        this.budgets.push(response.data.budget)
+                        this.snackbar = true
+                        this.budget = {amount:null,date:null,income:null,savings:null}
+                    })
+                    .catch((error)=>{
+                        this.errors = error.response.data.errors
+                    })
+
             },
             destroy(i){
-                this.budgets.splice(i,1)
-                this.message = "Budget Successfully Deleted"
-                this.snackbar = true
+
+                axios.delete('/api/budgets/'+this.budgets[i].id)
+                    .then((response)=>{
+                        this.budgets.splice(i,1)
+                        this.message = response.data.message
+                        this.snackbar = true
+                    })
+
+            },
+            get_budgets(){
+                axios.get('/api/budgets?page='+this.pagination.current)
+                    .then((response)=>{
+                        this.budgets = response.data.data
+                        this.pagination.current = response.data.meta.current_page
+                        this.pagination.total = response.data.meta.last_page
+                    })
+            },
+            onPageChange(){
+                this.get_budgets()
             }
 
+        },
+        created() {
+            this.get_budgets()
         }
     }
 </script>

@@ -66,6 +66,13 @@
                            </v-flex>
                            <v-divider></v-divider>
                        </v-layout>
+                       <v-card-actions>
+                           <v-pagination
+                                   v-model="pagination.current"
+                                   :length="pagination.total"
+                                   @input="onPageChange"
+                           ></v-pagination>
+                       </v-card-actions>
                    </v-card>
                 </v-card-text>
             </v-card>
@@ -79,20 +86,14 @@
         data(){return{
             category:{name:null,status:null},
             options:['Active', 'Suspended','Not Active'],
-            categories:[
-                {name:'Income',status:'Active'},
-                {name:'Emergency Fund',status:'Active'},
-                {name:'Housing',status:'Active'},
-                {name:'Installment',status:'Active'},
-                {name:'Black Tax',status:'Active'},
-                {name:'Savings',status:'Active'},
-                {name:'Health Care',status:'Suspended'},
-                {name:'Consumer Debt',status:'Active'},
-
-            ],
+            categories:[],
             editable:false,
             message:null,
-            snackbar:false
+            snackbar:false,
+            pagination:{
+                current:1,
+                total:0
+            }
         }},
         methods:{
             edit(i){
@@ -108,7 +109,21 @@
             submit(){
                 this.message = "Category Successfully Added"
                 this.snackbar = true
+            },
+            get_categories(){
+                axios.get('/api/categories?page='+this.pagination.current)
+                    .then((response)=>{
+                        this.categories = response.data.data
+                        this.pagination.current = response.data.meta.current_page
+                        this.pagination.total = response.data.meta.last_page
+                    })
+            },
+            onPageChange(){
+                this.get_categories()
             }
+        },
+        created() {
+            this.get_categories()
         }
     }
 </script>

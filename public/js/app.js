@@ -2005,6 +2005,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Budget",
   data: function data() {
@@ -2015,57 +2022,84 @@ __webpack_require__.r(__webpack_exports__);
         income: null,
         savings: null
       },
-      budgets: [{
-        amount: 23000,
-        date: '2019-01-30',
-        income: 40000,
-        savings: 10000
-      }, {
-        amount: 22000,
-        date: '2019-02-28',
-        income: 40000,
-        savings: 11000
-      }, {
-        amount: 21000,
-        date: '2019-03-30',
-        income: 40000,
-        savings: 12000
-      }, {
-        amount: 23000,
-        date: '2019-04-30',
-        income: 40000,
-        savings: 10000
-      }],
+      budgets: [],
       snackbar: false,
       message: null,
-      editable: false
+      editable: false,
+      errors: {},
+      index: null,
+      pagination: {
+        current: 1,
+        total: 0
+      }
     };
   },
   methods: {
     edit: function edit(i) {
       this.editable = true;
       this.budget = this.budgets[i];
+      this.index = i;
     },
     update: function update() {
-      this.editable = false;
-      this.budget = {
-        amount: null,
-        date: null,
-        income: null,
-        savings: null
-      };
-      this.message = "Budget Successfully updated";
-      this.snackbar = true;
+      var _this = this;
+
+      axios.put('/api/budgets/' + this.budgets[this.index].id, this.budget).then(function (response) {
+        _this.editable = false;
+        _this.budget = {
+          amount: null,
+          date: null,
+          income: null,
+          savings: null
+        };
+        _this.message = response.data.message;
+        _this.snackbar = true;
+        _this.budgets[_this.index] = response.data.budget;
+      });
     },
     submit: function submit() {
-      this.message = "Budget Successfully Added";
-      this.snackbar = true;
+      var _this2 = this;
+
+      axios.post('/api/budgets', this.budget).then(function (response) {
+        _this2.message = response.data.message;
+
+        _this2.budgets.push(response.data.budget);
+
+        _this2.snackbar = true;
+        _this2.budget = {
+          amount: null,
+          date: null,
+          income: null,
+          savings: null
+        };
+      })["catch"](function (error) {
+        _this2.errors = error.response.data.errors;
+      });
     },
     destroy: function destroy(i) {
-      this.budgets.splice(i, 1);
-      this.message = "Budget Successfully Deleted";
-      this.snackbar = true;
+      var _this3 = this;
+
+      axios["delete"]('/api/budgets/' + this.budgets[i].id).then(function (response) {
+        _this3.budgets.splice(i, 1);
+
+        _this3.message = response.data.message;
+        _this3.snackbar = true;
+      });
+    },
+    get_budgets: function get_budgets() {
+      var _this4 = this;
+
+      axios.get('/api/budgets?page=' + this.pagination.current).then(function (response) {
+        _this4.budgets = response.data.data;
+        _this4.pagination.current = response.data.meta.current_page;
+        _this4.pagination.total = response.data.meta.last_page;
+      });
+    },
+    onPageChange: function onPageChange() {
+      this.get_budgets();
     }
+  },
+  created: function created() {
+    this.get_budgets();
   }
 });
 
@@ -2155,6 +2189,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Categories",
   data: function data() {
@@ -2164,34 +2205,14 @@ __webpack_require__.r(__webpack_exports__);
         status: null
       },
       options: ['Active', 'Suspended', 'Not Active'],
-      categories: [{
-        name: 'Income',
-        status: 'Active'
-      }, {
-        name: 'Emergency Fund',
-        status: 'Active'
-      }, {
-        name: 'Housing',
-        status: 'Active'
-      }, {
-        name: 'Installment',
-        status: 'Active'
-      }, {
-        name: 'Black Tax',
-        status: 'Active'
-      }, {
-        name: 'Savings',
-        status: 'Active'
-      }, {
-        name: 'Health Care',
-        status: 'Suspended'
-      }, {
-        name: 'Consumer Debt',
-        status: 'Active'
-      }],
+      categories: [],
       editable: false,
       message: null,
-      snackbar: false
+      snackbar: false,
+      pagination: {
+        current: 1,
+        total: 0
+      }
     };
   },
   methods: {
@@ -2211,7 +2232,22 @@ __webpack_require__.r(__webpack_exports__);
     submit: function submit() {
       this.message = "Category Successfully Added";
       this.snackbar = true;
+    },
+    get_categories: function get_categories() {
+      var _this = this;
+
+      axios.get('/api/categories?page=' + this.pagination.current).then(function (response) {
+        _this.categories = response.data.data;
+        _this.pagination.current = response.data.meta.current_page;
+        _this.pagination.total = response.data.meta.last_page;
+      });
+    },
+    onPageChange: function onPageChange() {
+      this.get_categories();
     }
+  },
+  created: function created() {
+    this.get_categories();
   }
 });
 
@@ -2778,67 +2814,43 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Expenses",
   data: function data() {
     return {
-      expenses: [{
-        name: 'Car Insurance',
-        category: 'Installment',
-        amount: '1523',
-        status: 'paid'
-      }, {
-        name: 'House Hold 1',
-        category: 'Black Tax',
-        amount: '1000',
-        status: 'paid'
-      }, {
-        name: 'House Hold 2',
-        category: 'Installment',
-        amount: '1000',
-        status: 'paid'
-      }, {
-        name: 'Food and Groceries',
-        category: 'Installment',
-        amount: '1523',
-        status: 'outstanding'
-      }, {
-        name: 'Helper',
-        category: 'Consumer Debt',
-        amount: '800',
-        status: 'onprogress'
-      }, {
-        name: 'Car',
-        category: 'Consumer Debt',
-        amount: '5000',
-        status: 'paid'
-      }, {
-        name: 'Petrol',
-        category: 'Consumer Debt',
-        amount: '3000',
-        status: 'paid'
-      }, {
-        name: 'Medical Aid',
-        category: 'Health Care',
-        amount: '1523',
-        status: 'paid'
-      }, {
-        name: 'Pension Fund',
-        category: 'Savings',
-        amount: '1523',
-        status: 'paid'
-      }],
+      expenses: [],
       expense: {
         name: null,
-        category: null,
+        category_id: null,
         amount: null,
-        status: null
+        status: null,
+        expense_date: null
       },
-      options: ['Active', 'Suspended', 'Not Active'],
-      categories: ['Income', 'Emergency Fund', 'Housing', 'Installment', 'Black Tax', 'Savings', 'Health Care', 'Consumer Debt', 'Unplanned'],
+      options: ['Paid', 'Onprogress', 'Outstanding'],
+      categories: {},
       editable: false,
       snackbar: false,
-      message: null
+      message: null,
+      errors: {},
+      index: null,
+      pagination: {
+        current: 1,
+        total: 0
+      }
     };
   },
   methods: {
@@ -2847,19 +2859,77 @@ __webpack_require__.r(__webpack_exports__);
       this.expense = this.expenses[i];
     },
     update: function update() {
-      this.editable = false;
-      this.expense = {
-        name: null,
-        status: null
-      };
-      this.message = "Expense Successfully updated";
-      this.snackbar = true;
+      var _this = this;
+
+      axios.put('/api/expenses/' + this.expense.id, this.expense).then(function (response) {
+        _this.editable = false;
+        _this.message = response.data.message;
+        _this.expenses[_this.index] = response.data.expense;
+        _this.index = null;
+        _this.snackbar = true;
+      });
+    },
+    destroy: function destroy(i) {
+      var _this2 = this;
+
+      axios["delete"]('/api/categories/' + this.expenses[i].id).then(function (response) {
+        _this2.snackbar = true;
+        _this2.message = response.data.message;
+
+        _this2.expenses.splice(i, 1);
+
+        _this2.expense = {
+          name: null,
+          id: null,
+          amount: null,
+          status: null,
+          expense_date: null
+        };
+      });
     },
     submit: function submit() {
-      this.message = "Expense Successfully Added";
-      this.expenses.push(this.expense);
-      this.snackbar = true;
+      var _this3 = this;
+
+      axios.post('/api/expenses', this.expense).then(function (response) {
+        _this3.message = response.data.message;
+
+        _this3.expenses.push(response.data.expense);
+
+        _this3.snackbar = true;
+        _this3.expense = {
+          name: null,
+          id: null,
+          amount: null,
+          status: null,
+          expense_date: null
+        };
+      })["catch"](function (error) {
+        _this3.errors = error.response.data.errors;
+      });
+    },
+    get_expenses: function get_expenses() {
+      var _this4 = this;
+
+      axios.get('/api/expenses?page=' + this.pagination.current).then(function (response) {
+        _this4.expenses = response.data.data;
+        _this4.pagination.current = response.data.meta.current_page;
+        _this4.pagination.total = response.data.meta.last_page;
+      });
+    },
+    get_categories: function get_categories() {
+      var _this5 = this;
+
+      axios.get('/api/getList ').then(function (response) {
+        _this5.categories = response.data.data;
+      });
+    },
+    onPageChange: function onPageChange() {
+      this.get_expenses();
     }
+  },
+  created: function created() {
+    this.get_expenses();
+    this.get_categories();
   }
 });
 
@@ -3168,94 +3238,112 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Vacations",
   data: function data() {
     return {
-      vacations: [{
-        destination: "Thailand",
-        start: '2019-12-21',
-        end: '2019-12-28',
-        duration: 6,
-        adults: 2,
-        children: 0,
-        activies: ['Culture', 'Outdours', 'Relaxing', 'Romantic', 'Beaches', 'Historic Sites', 'Museums', 'Shopping', 'Wildlife'],
-        cost: 30000,
-        status: 'Going'
-      }, {
-        destination: "Mauritius",
-        start: '2019-05-03',
-        end: '2019-03-06',
-        duration: 3,
-        adults: 2,
-        children: 0,
-        activies: ['Culture', 'Outdours', 'Relaxing', 'Romantic', 'Beaches', 'Wildlife'],
-        cost: 20000,
-        status: 'New'
-      }, {
-        destination: "Durban",
-        start: '2019-11-04',
-        end: '2019-11-06',
-        duration: 2,
-        adults: 2,
-        children: 1,
-        activies: ['Culture', 'Outdours', 'Relaxing', 'Romantic', 'Beaches', 'Wildlife', 'Museums'],
-        cost: 15000,
-        status: 'New'
-      }, {
-        destination: "Cape Town",
-        start: '2019-08-11',
-        end: '2019-09-19',
-        duration: 8,
-        adults: 2,
-        children: 1,
-        activies: ['Culture', 'Outdours', 'Relaxing', 'Romantic', 'Beaches', 'Wildlife', 'Museums'],
-        cost: 20000,
-        status: 'New'
-      }],
+      vacations: [],
       vacation: {
         destination: null,
         start: null,
         end: null,
         adults: null,
         children: null,
-        activies: [],
+        activities: [],
         cost: null,
         status: null
       },
       options: ['Going', 'New', 'Cancelled'],
       editable: false,
       snackbar: false,
-      message: null
+      message: null,
+      errors: {},
+      index: null,
+      pagination: {
+        current: 1,
+        total: 0
+      }
     };
   },
   methods: {
     edit: function edit(i) {
       this.editable = true;
       this.vacation = this.vacations[i];
+      this.index = i;
     },
     update: function update() {
-      this.editable = false;
-      this.vacation = {
-        destination: null,
-        start: null,
-        end: null,
-        adults: null,
-        children: null,
-        activies: ['Culture', 'Outdours', 'Relaxing', 'Romantic', 'Beaches', 'Historic Sites', 'Museums', 'Shopping', 'Wildlife'],
-        cost: null
-      };
-      this.message = "Expense Successfully updated";
-      this.snackbar = true;
+      var _this = this;
+
+      axios.put('/api/vacations/' + this.vacation.id, this.vacation).then(function (response) {
+        _this.editable = false;
+        _this.vacation = {
+          destination: null,
+          start: null,
+          end: null,
+          adults: null,
+          children: null,
+          activities: [],
+          cost: null
+        };
+        _this.message = response.data.message;
+        _this.vacations[_this.index] = response.data.vacation;
+        _this.snackbar = true;
+      });
     },
     submit: function submit() {
+      var _this2 = this;
+
       this.message = "Expense Successfully Added";
-      this.vacations.push(this.vacation);
-      this.snackbar = true;
+      axios.post('/api/vacations', this.vacation).then(function (response) {
+        _this2.vacations.push(response.data.vacation);
+
+        _this2.message = response.data.message;
+        _this2.snackbar = true;
+        _this2.vacation = {
+          destination: null,
+          start: null,
+          end: null,
+          adults: null,
+          children: null,
+          activities: [],
+          cost: null
+        };
+      })["catch"](function (errors) {
+        _this2.errors = errors.response.data;
+      });
     },
     destroy: function destroy(i) {
-      this.vacations.splice(i, 1);
+      var _this3 = this;
+
+      axios["delete"]('/api/vacations/' + this.vacations[i].id).then(function (response) {
+        _this3.vacations.splice(i, 1);
+
+        _this3.message = response.message;
+      });
+    },
+    get_vacations: function get_vacations() {
+      var _this4 = this;
+
+      axios.get('/api/vacations?page=' + this.pagination.current).then(function (response) {
+        _this4.vacations = response.data.data;
+        _this4.pagination.current = response.data.meta.current_page;
+        _this4.pagination.total = response.data.meta.last_page;
+      });
+    },
+    onPageChange: function onPageChange() {
+      this.get_vacations();
     }
+  },
+  created: function created() {
+    this.get_vacations();
   }
 });
 
@@ -70960,10 +71048,19 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _vm.editable
-                    ? _c("v-btn", { attrs: { color: "warning" } }, [
-                        _vm._v("Update")
-                      ])
-                    : _c("v-btn", { attrs: { color: "info" } }, [_vm._v("Add")])
+                    ? _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "warning" },
+                          on: { click: _vm.update }
+                        },
+                        [_vm._v("Update")]
+                      )
+                    : _c(
+                        "v-btn",
+                        { attrs: { color: "info" }, on: { click: _vm.submit } },
+                        [_vm._v("Add")]
+                      )
                 ],
                 1
               ),
@@ -71105,7 +71202,25 @@ var render = function() {
                       ],
                       1
                     )
-                  })
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-pagination", {
+                        attrs: { length: _vm.pagination.total },
+                        on: { input: _vm.onPageChange },
+                        model: {
+                          value: _vm.pagination.current,
+                          callback: function($$v) {
+                            _vm.$set(_vm.pagination, "current", $$v)
+                          },
+                          expression: "pagination.current"
+                        }
+                      })
+                    ],
+                    1
+                  )
                 ],
                 2
               )
@@ -71330,7 +71445,25 @@ var render = function() {
                           ],
                           1
                         )
-                      })
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c("v-pagination", {
+                            attrs: { length: _vm.pagination.total },
+                            on: { input: _vm.onPageChange },
+                            model: {
+                              value: _vm.pagination.current,
+                              callback: function($$v) {
+                                _vm.$set(_vm.pagination, "current", $$v)
+                              },
+                              expression: "pagination.current"
+                            }
+                          })
+                        ],
+                        1
+                      )
                     ],
                     2
                   )
@@ -72417,13 +72550,19 @@ var render = function() {
                       }),
                       _vm._v(" "),
                       _c("v-select", {
-                        attrs: { items: _vm.categories, label: "Category" },
+                        attrs: {
+                          items: _vm.categories,
+                          label: "Category",
+                          "item-text": "name",
+                          "item-value": "id",
+                          autocimplete: ""
+                        },
                         model: {
-                          value: _vm.expense.category,
+                          value: _vm.expense.category_id,
                           callback: function($$v) {
-                            _vm.$set(_vm.expense, "category", $$v)
+                            _vm.$set(_vm.expense, "category_id", $$v)
                           },
-                          expression: "expense.category"
+                          expression: "expense.category_id"
                         }
                       }),
                       _vm._v(" "),
@@ -72448,6 +72587,32 @@ var render = function() {
                           expression: "expense.amount"
                         }
                       }),
+                      _vm._v(" "),
+                      _c(
+                        "v-menu",
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              slot: "activator",
+                              value: _vm.expense.expense_date,
+                              label: "Expense Date",
+                              "prepend-icon": "date_range"
+                            },
+                            slot: "activator"
+                          }),
+                          _vm._v(" "),
+                          _c("v-date-picker", {
+                            model: {
+                              value: _vm.expense.expense_date,
+                              callback: function($$v) {
+                                _vm.$set(_vm.expense, "expense_date", $$v)
+                              },
+                              expression: "expense.expense_date"
+                            }
+                          })
+                        ],
+                        1
+                      ),
                       _vm._v(" "),
                       _c("v-spacer"),
                       _vm._v(" "),
@@ -72588,9 +72753,18 @@ var render = function() {
                                   "v-btn",
                                   { attrs: { small: "", icon: "" } },
                                   [
-                                    _c("v-icon", { attrs: { color: "red" } }, [
-                                      _vm._v("delete")
-                                    ])
+                                    _c(
+                                      "v-icon",
+                                      {
+                                        attrs: { color: "red" },
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.destroy(index)
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("delete")]
+                                    )
                                   ],
                                   1
                                 )
@@ -72605,7 +72779,25 @@ var render = function() {
                       ],
                       1
                     )
-                  })
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-pagination", {
+                        attrs: { length: _vm.pagination.total },
+                        on: { input: _vm.onPageChange },
+                        model: {
+                          value: _vm.pagination.current,
+                          callback: function($$v) {
+                            _vm.$set(_vm.pagination, "current", $$v)
+                          },
+                          expression: "pagination.current"
+                        }
+                      })
+                    ],
+                    1
+                  )
                 ],
                 2
               )
@@ -73049,11 +73241,11 @@ var render = function() {
                               "hide-details": ""
                             },
                             model: {
-                              value: _vm.vacation.activies,
+                              value: _vm.vacation.activities,
                               callback: function($$v) {
-                                _vm.$set(_vm.vacation, "activies", $$v)
+                                _vm.$set(_vm.vacation, "activities", $$v)
                               },
-                              expression: "vacation.activies"
+                              expression: "vacation.activities"
                             }
                           }),
                           _vm._v(" "),
@@ -73064,11 +73256,11 @@ var render = function() {
                               "hide-details": ""
                             },
                             model: {
-                              value: _vm.vacation.activies,
+                              value: _vm.vacation.activities,
                               callback: function($$v) {
-                                _vm.$set(_vm.vacation, "activies", $$v)
+                                _vm.$set(_vm.vacation, "activities", $$v)
                               },
-                              expression: "vacation.activies"
+                              expression: "vacation.activities"
                             }
                           }),
                           _vm._v(" "),
@@ -73079,11 +73271,11 @@ var render = function() {
                               "hide-details": ""
                             },
                             model: {
-                              value: _vm.vacation.activies,
+                              value: _vm.vacation.activities,
                               callback: function($$v) {
-                                _vm.$set(_vm.vacation, "activies", $$v)
+                                _vm.$set(_vm.vacation, "activities", $$v)
                               },
-                              expression: "vacation.activies"
+                              expression: "vacation.activities"
                             }
                           })
                         ],
@@ -73101,11 +73293,11 @@ var render = function() {
                               "hide-details": ""
                             },
                             model: {
-                              value: _vm.vacation.activies,
+                              value: _vm.vacation.activities,
                               callback: function($$v) {
-                                _vm.$set(_vm.vacation, "activies", $$v)
+                                _vm.$set(_vm.vacation, "activities", $$v)
                               },
-                              expression: "vacation.activies"
+                              expression: "vacation.activities"
                             }
                           }),
                           _vm._v(" "),
@@ -73116,11 +73308,11 @@ var render = function() {
                               "hide-details": ""
                             },
                             model: {
-                              value: _vm.vacation.activies,
+                              value: _vm.vacation.activities,
                               callback: function($$v) {
-                                _vm.$set(_vm.vacation, "activies", $$v)
+                                _vm.$set(_vm.vacation, "activities", $$v)
                               },
-                              expression: "vacation.activies"
+                              expression: "vacation.activities"
                             }
                           }),
                           _vm._v(" "),
@@ -73131,11 +73323,11 @@ var render = function() {
                               "hide-details": ""
                             },
                             model: {
-                              value: _vm.vacation.activies,
+                              value: _vm.vacation.activities,
                               callback: function($$v) {
-                                _vm.$set(_vm.vacation, "activies", $$v)
+                                _vm.$set(_vm.vacation, "activities", $$v)
                               },
-                              expression: "vacation.activies"
+                              expression: "vacation.activities"
                             }
                           })
                         ],
@@ -73153,11 +73345,11 @@ var render = function() {
                               "hide-details": ""
                             },
                             model: {
-                              value: _vm.vacation.activies,
+                              value: _vm.vacation.activities,
                               callback: function($$v) {
-                                _vm.$set(_vm.vacation, "activies", $$v)
+                                _vm.$set(_vm.vacation, "activities", $$v)
                               },
-                              expression: "vacation.activies"
+                              expression: "vacation.activities"
                             }
                           }),
                           _vm._v(" "),
@@ -73168,11 +73360,11 @@ var render = function() {
                               "hide-details": ""
                             },
                             model: {
-                              value: _vm.vacation.activies,
+                              value: _vm.vacation.activities,
                               callback: function($$v) {
-                                _vm.$set(_vm.vacation, "activies", $$v)
+                                _vm.$set(_vm.vacation, "activities", $$v)
                               },
-                              expression: "vacation.activies"
+                              expression: "vacation.activities"
                             }
                           }),
                           _vm._v(" "),
@@ -73183,11 +73375,11 @@ var render = function() {
                               "hide-details": ""
                             },
                             model: {
-                              value: _vm.vacation.activies,
+                              value: _vm.vacation.activities,
                               callback: function($$v) {
-                                _vm.$set(_vm.vacation, "activies", $$v)
+                                _vm.$set(_vm.vacation, "activities", $$v)
                               },
-                              expression: "vacation.activies"
+                              expression: "vacation.activities"
                             }
                           })
                         ],
@@ -73200,11 +73392,23 @@ var render = function() {
                   _c(
                     "v-card-actions",
                     [
-                      _c(
-                        "v-btn",
-                        { attrs: { color: "info" }, on: { click: _vm.submit } },
-                        [_vm._v("Add Vacation")]
-                      )
+                      _vm.editable
+                        ? _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "info" },
+                              on: { click: _vm.update }
+                            },
+                            [_vm._v("Update")]
+                          )
+                        : _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "info" },
+                              on: { click: _vm.submit }
+                            },
+                            [_vm._v("Add Vacation")]
+                          )
                     ],
                     1
                   )
@@ -73358,10 +73562,11 @@ var render = function() {
                                           _vm._v("waves")
                                         ]),
                                         _vm._v(" "),
-                                        _vm._l(vacation.activies, function(
-                                          activity
+                                        _vm._l(vacation.activities, function(
+                                          activity,
+                                          i
                                         ) {
-                                          return _c("span", { key: activity }, [
+                                          return _c("span", [
                                             _vm._v(_vm._s(activity) + " |")
                                           ])
                                         })
@@ -73436,6 +73641,24 @@ var render = function() {
                     1
                   )
                 }),
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c("v-pagination", {
+                    attrs: { length: _vm.pagination.total },
+                    on: { input: _vm.onPageChange },
+                    model: {
+                      value: _vm.pagination.current,
+                      callback: function($$v) {
+                        _vm.$set(_vm.pagination, "current", $$v)
+                      },
+                      expression: "pagination.current"
+                    }
+                  })
+                ],
                 1
               )
             ],

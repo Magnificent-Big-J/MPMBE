@@ -18,5 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::resource('categories','CategoryController');
+Route::get('getList','CategoryController@get_categories');
 Route::resource('budgets','BudgetController');
 Route::resource('vacations','VacationController');
+Route::resource('expenses','ExpenseController');
+
