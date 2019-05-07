@@ -8,21 +8,11 @@
                 <span class="caption">My Personal Monthly Budget Expenses</span>
             </v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-menu offset-y>
-                <v-btn flat slot="activator" color="grey">
-                    <v-icon left>expand_more</v-icon>
-                    <span>Menu</span>
-                </v-btn>
-                <v-list>
-                    <v-list-tile v-for="link in links" :key="link.text" router :to="link.route">
-                        <v-list-tile-title>{{link.text}}</v-list-tile-title>
-                    </v-list-tile>
-                </v-list>
-            </v-menu>
-            <v-btn flat color="grey">
-                <span>Sign out</span>
-                <v-icon right>exit_to_app</v-icon>
+
+            <v-btn flat @click="logout">
+                <v-icon>exit_to_app</v-icon>
             </v-btn>
+
         </v-toolbar>
         <v-navigation-drawer app v-if="drawer" class="primary">
             <v-layout column align-center>
@@ -31,7 +21,7 @@
                         <img src="/images/avatar-1.png" alt="">
                     </v-avatar>
                     <p class="white--text subheading mt-1">
-                        Joel Mnisi
+                        {{username}}
                     </p>
                 </v-flex>
 
@@ -46,6 +36,7 @@
                     </v-list-tile-content>
                 </v-list-tile>
             </v-list>
+
         </v-navigation-drawer>
     </nav>
 </template>
@@ -54,7 +45,7 @@
     export default {
         name: "Navbar",
         data(){return{
-            drawer:false,
+            drawer:true,
             links:[
                 {icon:'dashboard',text:'Dashboard', route:'/dashboard'},
                 {icon:'category',text:'Categories', route:'/categories'},
@@ -63,14 +54,26 @@
                 {icon:'flight',text:'Vacations', route:'/vacations'},
                 {icon:'money',text:'Budget', route:'/budget'},
                 {icon:'assessment',text:'Expense Draft', route:'/draft'},
+
             ]
         }},
         methods:{
             toggle(){
 
                 this.drawer = !this.drawer
+            },
+            logout(){
+                User.logout()
+            },
+        },
+        computed:{
+            username(){
+                return User.username()
             }
         },
+        created() {
+
+        }
     }
 </script>
 

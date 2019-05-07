@@ -7,20 +7,35 @@ import OverView from '../components/views/OverviewAnalytics.vue'
 import Vacations from '../components/views/Vacations.vue'
 import Budget from '../components/views/Budget.vue'
 import ExpenseDraft from '../components/views/ExpenseDraft.vue'
+import Login from '../components/views/Login.vue'
+import Admin from  '../components/Admin.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
-    {path:'/categories',component:Categories},
-    {path:'/dashboard',component:Dashboard},
-    {path:'/expenses',component:Expenses},
-    {path:'/overview-analytics',component:OverView},
-    {path:'/vacations',component:Vacations},
-    {path:'/budget',component:Budget},
-    {path:'/draft',component:ExpenseDraft},
+    {path:'/',component:Login},
+    {
+        path:'/admin',
+        component:Admin,
+        name:'admin',
+        children:[
+            {path:'/categories',component:Categories},
+            {path:'/dashboard',component:Dashboard,name:'dashboard'},
+            {path:'/expenses',component:Expenses},
+            {path:'/overview-analytics',component:OverView},
+            {path:'/vacations',component:Vacations},
+            {path:'/budget',component:Budget},
+            {path:'/draft',component:ExpenseDraft},
+        ]
+    }
+
+
 ]
 
 const router = new VueRouter({
-    routes
+    routes,
+    hasbang:false,
+    mode:'history'
 })
 
 export  default  router

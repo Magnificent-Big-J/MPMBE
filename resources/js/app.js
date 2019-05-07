@@ -8,12 +8,17 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+Vue.prototype.$eventHub = new Vue();
+window.EventBus = new Vue()
 import Vuetify from 'vuetify'
 import router from './router/router'
+import User from  './helpers/user'
 require('chart.js')
 require('hchs-vue-charts')
 Vue.use(VueCharts)
 Vue.use(Vuetify)
+window.User = User
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
