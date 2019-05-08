@@ -189,7 +189,11 @@
             }
 
         },
-
+        created() {
+            if(!User.loggedIn()){
+                this.$router.push("/")
+            }
+        }
     }
 </script>
 

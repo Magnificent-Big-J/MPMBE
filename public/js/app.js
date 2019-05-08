@@ -2120,6 +2120,10 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
+    if (!User.loggedIn()) {
+      this.$router.push("/");
+    }
+
     this.get_budgets();
   }
 });
@@ -2291,6 +2295,10 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
+    if (!User.loggedIn()) {
+      this.$router.push("/");
+    }
+
     this.get_categories();
   }
 });
@@ -2522,6 +2530,11 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     };
+  },
+  created: function created() {
+    if (!User.loggedIn()) {
+      this.$router.push("/");
+    }
   }
 });
 
@@ -2735,6 +2748,11 @@ __webpack_require__.r(__webpack_exports__);
 
       this.totalExpense = sum;
       this.balance = parseInt(this.budget) - parseInt(this.totalExpense);
+    }
+  },
+  created: function created() {
+    if (!User.loggedIn()) {
+      this.$router.push("/");
     }
   }
 });
@@ -2972,6 +2990,10 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
+    if (!User.loggedIn()) {
+      this.$router.push("/");
+    }
+
     this.get_expenses();
     this.get_categories();
   }
@@ -3019,6 +3041,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Login",
   data: function data() {
@@ -3027,15 +3055,14 @@ __webpack_require__.r(__webpack_exports__);
         email: null,
         password: null
       },
-      errors: {}
+      errors: null
     };
   },
   methods: {
     login: function login() {
       User.login(this.form);
     }
-  },
-  created: function created() {}
+  }
 });
 
 /***/ }),
@@ -3131,6 +3158,11 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     };
+  },
+  created: function created() {
+    if (!User.loggedIn()) {
+      this.$router.push("/");
+    }
   }
 });
 
@@ -3448,6 +3480,10 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
+    if (!User.loggedIn()) {
+      this.$router.push("/");
+    }
+
     this.get_vacations();
   }
 });
@@ -71511,26 +71547,6 @@ var render = function() {
                                         )
                                       ],
                                       1
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-btn",
-                                      { attrs: { small: "", icon: "" } },
-                                      [
-                                        _c(
-                                          "v-icon",
-                                          {
-                                            attrs: { color: "red" },
-                                            on: {
-                                              click: function($event) {
-                                                return _vm.destroy(index)
-                                              }
-                                            }
-                                          },
-                                          [_vm._v("delete")]
-                                        )
-                                      ],
-                                      1
                                     )
                                   ],
                                   1
@@ -72971,6 +72987,16 @@ var render = function() {
                               _c(
                                 "v-form",
                                 [
+                                  _c(
+                                    "v-alert",
+                                    { attrs: { value: true, type: "error" } },
+                                    [
+                                      _vm._v(
+                                        "\n                                    Invalid Credentials\n                                "
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
                                   _c("v-text-field", {
                                     attrs: {
                                       "prepend-icon": "person",
@@ -115586,6 +115612,12 @@ function () {
     value: function clear() {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+      localStorage.removeItem('error');
+    }
+  }, {
+    key: "loginError",
+    value: function loginError(error) {
+      localStorage.setItem('error', error);
     }
   }, {
     key: "getToken",
@@ -115596,6 +115628,11 @@ function () {
     key: "getUser",
     value: function getUser() {
       return localStorage.getItem('user');
+    }
+  }, {
+    key: "getError",
+    value: function getError() {
+      return localStorage.getItem('error');
     }
   }]);
 
@@ -115736,6 +115773,11 @@ function () {
       if (this.loggedIn()) {
         return _AppStorage__WEBPACK_IMPORTED_MODULE_0__["default"].getUser();
       }
+    }
+  }, {
+    key: "getLoginError",
+    value: function getLoginError() {
+      return _AppStorage__WEBPACK_IMPORTED_MODULE_0__["default"].getError();
     }
   }]);
 

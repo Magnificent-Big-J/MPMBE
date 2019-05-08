@@ -59,9 +59,9 @@
                                    <v-btn small icon>
                                        <v-icon color="orange" @click="edit(index)">edit</v-icon>
                                    </v-btn>
-                                   <v-btn small icon>
+                                   <!--v-btn-- small icon>
                                        <v-icon color="red" @click="destroy(index)">delete</v-icon>
-                                   </v-btn>
+                                   </v-btn-->
                                </v-card-actions>
                            </v-flex>
                            <v-divider></v-divider>
@@ -140,6 +140,9 @@
             }
         },
         created() {
+            if(!User.loggedIn()){
+                this.$router.push("/")
+            }
             this.get_categories()
         }
     }

@@ -14,12 +14,19 @@
 
             localStorage.removeItem('token')
             localStorage.removeItem('user')
+            localStorage.removeItem('error')
+        }
+        loginError(error){
+            localStorage.setItem('error',error)
         }
         getToken(){
             return localStorage.getItem('token')
         }
         getUser(){
             return localStorage.getItem('user')
+        }
+        getError(){
+            return localStorage.getItem('error')
         }
     }
     export default AppStorage = new AppStorage();

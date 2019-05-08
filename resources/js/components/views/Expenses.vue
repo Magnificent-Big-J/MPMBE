@@ -200,6 +200,9 @@
             }
         },
         created(){
+            if(!User.loggedIn()){
+                this.$router.push("/")
+            }
             this.get_expenses()
             this.get_categories()
         }

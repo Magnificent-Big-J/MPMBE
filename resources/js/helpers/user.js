@@ -1,6 +1,7 @@
 import AppStorage from './AppStorage'
 import Token from './Token'
 class User{
+
     login(form){
         axios.post('/api/auth/login',form)
             .then((response)=>{
@@ -9,6 +10,8 @@ class User{
             })
             .catch((error)=>{
                 this.errors = error.response
+
+
             })
     }
     responseAfterLogin(response){
@@ -38,6 +41,9 @@ class User{
         if(this.loggedIn()){
             return AppStorage.getUser()
         }
+    }
+    getLoginError(){
+        return AppStorage.getError()
     }
 }
 

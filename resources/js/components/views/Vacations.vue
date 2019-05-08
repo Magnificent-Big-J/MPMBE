@@ -276,6 +276,9 @@
             }
         },
         created() {
+            if(!User.loggedIn()){
+                this.$router.push("/")
+            }
             this.get_vacations()
         }
     }
