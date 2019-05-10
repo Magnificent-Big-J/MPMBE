@@ -13,14 +13,15 @@
                             </v-toolbar>
                             <v-card-text>
                                 <v-form >
-                                    <v-alert
+                                    <v-alert v-if="errorMess"
                                             :value="true"
                                             type="error"
                                     >
                                         Invalid Credentials
                                     </v-alert>
-                                    <v-text-field  prepend-icon="person"  v-model="form.email"  type="email" label="Email" ></v-text-field>
-                                    <v-text-field prepend-icon="lock"  v-model="form.password" label="Password" id="password" type="password"></v-text-field>
+
+                                    <v-text-field  prepend-icon="person" required  v-model="form.email"  type="email" label="Email" ></v-text-field>
+                                    <v-text-field prepend-icon="lock" required  v-model="form.password" label="Password" id="password" type="password"></v-text-field>
                                 </v-form>
                             </v-card-text>
                             <v-card-actions>
@@ -40,7 +41,7 @@
         name: "Login",
         data(){return{
             form:{email:null,password:null},
-            errors:null
+            errorMess:null
         }},
         methods:{
             login(){
@@ -49,6 +50,8 @@
             },
 
         },
+
+
 
     }
 </script>

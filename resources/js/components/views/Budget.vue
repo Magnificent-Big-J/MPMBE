@@ -20,15 +20,20 @@
                            <v-layout row wrap class="pa-2">
                                <v-flex md6>
                                    <v-text-field label="Budget Amount" v-model="budget.amount"  prepend-icon="money"></v-text-field>
+                                   <small class="text-danger" v-if="errors.amount">{{errors.amount[0]}}</small>
+                                   <v-spacer></v-spacer>
                                    <v-menu>
                                        <v-text-field :value="budget.date"  slot="activator" label="Budget Date" prepend-icon="date_range"></v-text-field>
                                        <v-date-picker v-model="budget.date" ></v-date-picker>
                                    </v-menu>
-
+                                   <v-spacer></v-spacer>
+                                   <small class="text-danger" v-if="errors.date">{{errors.date[0]}}</small>
                                </v-flex>
                                <v-flex md6>
                                    <v-text-field label="Income" v-model="budget.income" prepend-icon="money"></v-text-field>
+                                   <small class="text-danger" v-if="errors.income">{{errors.income[0]}}</small>
                                    <v-text-field label="Savings" v-model="budget.savings" prepend-icon="money"></v-text-field>
+                                   <small class="text-danger" v-if="errors.savings">{{errors.savings[0]}}</small>
                                </v-flex>
                            </v-layout>
                            <v-btn color="warning" v-if="editable" @click="update">Update</v-btn>

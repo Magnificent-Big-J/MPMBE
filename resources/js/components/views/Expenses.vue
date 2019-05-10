@@ -17,6 +17,7 @@
                 <v-card-text>
                     <v-form>
                         <v-text-field label="Expense" v-model="expense.name"></v-text-field>
+                        <small class="text-danger" v-if="errors.name">{{errors.name[0]}}</small>
                         <v-select
                                 :items="categories"
                                 label="Category"
@@ -25,16 +26,22 @@
                                 item-value="id"
                                 autocimplete
                         ></v-select>
+                        <small class="text-danger" v-if="errors.category_id">{{errors.category_id[0]}}</small>
                         <v-select
                                 :items="options"
                                 label="Status"
                                 v-model="expense.status"
                         ></v-select>
+                        <small class="text-danger" v-if="errors.status">{{errors.status[0]}}</small>
                         <v-text-field label="Amount" v-model="expense.amount"></v-text-field>
+                        <small class="text-danger" v-if="errors.amount">{{errors.amount[0]}}</small>
+                        <v-spacer></v-spacer>
                         <v-menu>
                             <v-text-field :value="expense.expense_date"  slot="activator" label="Expense Date" prepend-icon="date_range"></v-text-field>
                             <v-date-picker v-model="expense.expense_date" ></v-date-picker>
                         </v-menu>
+                        <v-spacer></v-spacer>
+                        <small class="text-danger" v-if="errors.expense_date">{{errors.expense_date[0]}}</small>
                         <v-spacer></v-spacer>
                         <v-btn class="info mx-0 mt-3" v-if="editable" @click="update">Update Expense</v-btn>
                         <v-btn class="primary mx-0 mt-3" v-else @click="submit">Add Expense</v-btn>

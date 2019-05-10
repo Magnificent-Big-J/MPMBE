@@ -2033,6 +2033,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Budget",
   data: function data() {
@@ -2221,6 +2226,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Categories",
   data: function data() {
@@ -2238,7 +2247,8 @@ __webpack_require__.r(__webpack_exports__);
         current: 1,
         total: 0
       },
-      index: null
+      index: null,
+      errors: {}
     };
   },
   methods: {
@@ -2268,6 +2278,8 @@ __webpack_require__.r(__webpack_exports__);
 
         _this2.message = "Category Successfully Added";
         _this2.snackbar = true;
+      })["catch"](function (error) {
+        _this2.errors = error.response.data.errors;
       });
     },
     destroy: function destroy(i) {
@@ -2890,6 +2902,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Expenses",
   data: function data() {
@@ -3047,6 +3066,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Login",
   data: function data() {
@@ -3055,7 +3075,7 @@ __webpack_require__.r(__webpack_exports__);
         email: null,
         password: null
       },
-      errors: null
+      errorMess: null
     };
   },
   methods: {
@@ -3383,6 +3403,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Vacations",
   data: function data() {
@@ -3454,7 +3482,7 @@ __webpack_require__.r(__webpack_exports__);
           cost: null
         };
       })["catch"](function (errors) {
-        _this2.errors = errors.response.data;
+        _this2.errors = errors.response.data.errors;
       });
     },
     destroy: function destroy(i) {
@@ -71110,6 +71138,14 @@ var render = function() {
                             }
                           }),
                           _vm._v(" "),
+                          _vm.errors.amount
+                            ? _c("small", { staticClass: "text-danger" }, [
+                                _vm._v(_vm._s(_vm.errors.amount[0]))
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c("v-spacer"),
+                          _vm._v(" "),
                           _c(
                             "v-menu",
                             [
@@ -71134,7 +71170,15 @@ var render = function() {
                               })
                             ],
                             1
-                          )
+                          ),
+                          _vm._v(" "),
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _vm.errors.date
+                            ? _c("small", { staticClass: "text-danger" }, [
+                                _vm._v(_vm._s(_vm.errors.date[0]))
+                              ])
+                            : _vm._e()
                         ],
                         1
                       ),
@@ -71154,6 +71198,12 @@ var render = function() {
                             }
                           }),
                           _vm._v(" "),
+                          _vm.errors.income
+                            ? _c("small", { staticClass: "text-danger" }, [
+                                _vm._v(_vm._s(_vm.errors.income[0]))
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
                           _c("v-text-field", {
                             attrs: {
                               label: "Savings",
@@ -71166,7 +71216,13 @@ var render = function() {
                               },
                               expression: "budget.savings"
                             }
-                          })
+                          }),
+                          _vm._v(" "),
+                          _vm.errors.savings
+                            ? _c("small", { staticClass: "text-danger" }, [
+                                _vm._v(_vm._s(_vm.errors.savings[0]))
+                              ])
+                            : _vm._e()
                         ],
                         1
                       )
@@ -71446,6 +71502,12 @@ var render = function() {
                         }
                       }),
                       _vm._v(" "),
+                      _vm.errors.name
+                        ? _c("small", { staticClass: "text-danger" }, [
+                            _vm._v(_vm._s(_vm.errors.name[0]))
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
                       _c("v-select", {
                         attrs: { items: _vm.options, label: "Status" },
                         model: {
@@ -71456,6 +71518,12 @@ var render = function() {
                           expression: "category.status"
                         }
                       }),
+                      _vm._v(" "),
+                      _vm.errors.status
+                        ? _c("small", { staticClass: "text-danger" }, [
+                            _vm._v(_vm._s(_vm.errors.status[0]))
+                          ])
+                        : _vm._e(),
                       _vm._v(" "),
                       _c("v-spacer"),
                       _vm._v(" "),
@@ -72663,6 +72731,12 @@ var render = function() {
                         }
                       }),
                       _vm._v(" "),
+                      _vm.errors.name
+                        ? _c("small", { staticClass: "text-danger" }, [
+                            _vm._v(_vm._s(_vm.errors.name[0]))
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
                       _c("v-select", {
                         attrs: {
                           items: _vm.categories,
@@ -72680,6 +72754,12 @@ var render = function() {
                         }
                       }),
                       _vm._v(" "),
+                      _vm.errors.category_id
+                        ? _c("small", { staticClass: "text-danger" }, [
+                            _vm._v(_vm._s(_vm.errors.category_id[0]))
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
                       _c("v-select", {
                         attrs: { items: _vm.options, label: "Status" },
                         model: {
@@ -72691,6 +72771,12 @@ var render = function() {
                         }
                       }),
                       _vm._v(" "),
+                      _vm.errors.status
+                        ? _c("small", { staticClass: "text-danger" }, [
+                            _vm._v(_vm._s(_vm.errors.status[0]))
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
                       _c("v-text-field", {
                         attrs: { label: "Amount" },
                         model: {
@@ -72701,6 +72787,14 @@ var render = function() {
                           expression: "expense.amount"
                         }
                       }),
+                      _vm._v(" "),
+                      _vm.errors.amount
+                        ? _c("small", { staticClass: "text-danger" }, [
+                            _vm._v(_vm._s(_vm.errors.amount[0]))
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("v-spacer"),
                       _vm._v(" "),
                       _c(
                         "v-menu",
@@ -72727,6 +72821,14 @@ var render = function() {
                         ],
                         1
                       ),
+                      _vm._v(" "),
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _vm.errors.expense_date
+                        ? _c("small", { staticClass: "text-danger" }, [
+                            _vm._v(_vm._s(_vm.errors.expense_date[0]))
+                          ])
+                        : _vm._e(),
                       _vm._v(" "),
                       _c("v-spacer"),
                       _vm._v(" "),
@@ -72987,19 +73089,24 @@ var render = function() {
                               _c(
                                 "v-form",
                                 [
-                                  _c(
-                                    "v-alert",
-                                    { attrs: { value: true, type: "error" } },
-                                    [
-                                      _vm._v(
-                                        "\n                                    Invalid Credentials\n                                "
+                                  _vm.errorMess
+                                    ? _c(
+                                        "v-alert",
+                                        {
+                                          attrs: { value: true, type: "error" }
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                                    Invalid Credentials\n                                "
+                                          )
+                                        ]
                                       )
-                                    ]
-                                  ),
+                                    : _vm._e(),
                                   _vm._v(" "),
                                   _c("v-text-field", {
                                     attrs: {
                                       "prepend-icon": "person",
+                                      required: "",
                                       type: "email",
                                       label: "Email"
                                     },
@@ -73015,6 +73122,7 @@ var render = function() {
                                   _c("v-text-field", {
                                     attrs: {
                                       "prepend-icon": "lock",
+                                      required: "",
                                       label: "Password",
                                       id: "password",
                                       type: "password"
@@ -73317,7 +73425,13 @@ var render = function() {
                               },
                               expression: "vacation.destination"
                             }
-                          })
+                          }),
+                          _vm._v(" "),
+                          _vm.errors.destination
+                            ? _c("small", { staticClass: "text-danger" }, [
+                                _vm._v(_vm._s(_vm.errors.destination[0]))
+                              ])
+                            : _vm._e()
                         ],
                         1
                       ),
@@ -73335,7 +73449,13 @@ var render = function() {
                               },
                               expression: "vacation.cost"
                             }
-                          })
+                          }),
+                          _vm._v(" "),
+                          _vm.errors.cost
+                            ? _c("small", { staticClass: "text-danger" }, [
+                                _vm._v(_vm._s(_vm.errors.cost[0]))
+                              ])
+                            : _vm._e()
                         ],
                         1
                       )
@@ -73375,7 +73495,15 @@ var render = function() {
                               })
                             ],
                             1
-                          )
+                          ),
+                          _vm._v(" "),
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _vm.errors.start
+                            ? _c("small", { staticClass: "text-danger" }, [
+                                _vm._v(_vm._s(_vm.errors.start[0]))
+                              ])
+                            : _vm._e()
                         ],
                         1
                       ),
@@ -73408,7 +73536,15 @@ var render = function() {
                               })
                             ],
                             1
-                          )
+                          ),
+                          _vm._v(" "),
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _vm.errors.end
+                            ? _c("small", { staticClass: "text-danger" }, [
+                                _vm._v(_vm._s(_vm.errors.end[0]))
+                              ])
+                            : _vm._e()
                         ],
                         1
                       )
@@ -73433,7 +73569,13 @@ var render = function() {
                               },
                               expression: "vacation.status"
                             }
-                          })
+                          }),
+                          _vm._v(" "),
+                          _vm.errors.status
+                            ? _c("small", { staticClass: "text-danger" }, [
+                                _vm._v(_vm._s(_vm.errors.status[0]))
+                              ])
+                            : _vm._e()
                         ],
                         1
                       )
@@ -73458,7 +73600,13 @@ var render = function() {
                               },
                               expression: "vacation.adults"
                             }
-                          })
+                          }),
+                          _vm._v(" "),
+                          _vm.errors.adults
+                            ? _c("small", { staticClass: "text-danger" }, [
+                                _vm._v(_vm._s(_vm.errors.adults[0]))
+                              ])
+                            : _vm._e()
                         ],
                         1
                       ),
@@ -73476,7 +73624,13 @@ var render = function() {
                               },
                               expression: "vacation.children"
                             }
-                          })
+                          }),
+                          _vm._v(" "),
+                          _vm.errors.children
+                            ? _c("small", { staticClass: "text-danger" }, [
+                                _vm._v(_vm._s(_vm.errors.children[0]))
+                              ])
+                            : _vm._e()
                         ],
                         1
                       )
@@ -73639,7 +73793,13 @@ var render = function() {
                               },
                               expression: "vacation.activities"
                             }
-                          })
+                          }),
+                          _vm._v(" "),
+                          _vm.errors.activities
+                            ? _c("small", { staticClass: "text-danger" }, [
+                                _vm._v(_vm._s(_vm.errors.activities[0]))
+                              ])
+                            : _vm._e()
                         ],
                         1
                       )
@@ -115732,6 +115892,7 @@ function () {
         _this.responseAfterLogin(response);
       })["catch"](function (error) {
         _this.errors = error.response;
+        _AppStorage__WEBPACK_IMPORTED_MODULE_0__["default"].loginError(error.response.data.error);
       });
     }
   }, {
@@ -115777,7 +115938,7 @@ function () {
   }, {
     key: "getLoginError",
     value: function getLoginError() {
-      return _AppStorage__WEBPACK_IMPORTED_MODULE_0__["default"].getError();
+      return _AppStorage__WEBPACK_IMPORTED_MODULE_0__["default"].getError() ? true : false;
     }
   }]);
 

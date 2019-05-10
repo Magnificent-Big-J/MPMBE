@@ -18,12 +18,16 @@
                 </v-card-title>
                 <v-card-text>
                     <v-form class="px-3">
-                        <v-text-field label="Category" v-model="category.name"></v-text-field>
+                        <v-text-field label="Category" v-model="category.name">
+
+                        </v-text-field>
+                        <small class="text-danger" v-if="errors.name">{{errors.name[0]}}</small>
                         <v-select
                                 :items="options"
                                 label="Status"
                                 v-model="category.status"
                         ></v-select>
+                        <small class="text-danger" v-if="errors.status">{{errors.status[0]}}</small>
                         <v-spacer></v-spacer>
                         <v-btn class="warning mx-0 mt-3" v-if="editable" @click="update">Update Category</v-btn>
                         <v-btn class="primary mx-0 mt-3" v-else @click="submit">Add Category</v-btn>
@@ -94,7 +98,8 @@
                 current:1,
                 total:0
             },
-            index:null
+            index:null,
+            errors:{}
         }},
         methods:{
             edit(i){
@@ -117,6 +122,9 @@
                         this.categories.push(response.data)
                         this.message = "Category Successfully Added"
                         this.snackbar = true
+                    })
+                    .catch((error)=>{
+                        this.errors = error.response.data.errors
                     })
             },
             destroy(i){

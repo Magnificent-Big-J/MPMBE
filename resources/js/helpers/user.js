@@ -10,7 +10,7 @@ class User{
             })
             .catch((error)=>{
                 this.errors = error.response
-
+                AppStorage.loginError(error.response.data.error)
 
             })
     }
@@ -43,7 +43,7 @@ class User{
         }
     }
     getLoginError(){
-        return AppStorage.getError()
+        return AppStorage.getError() ? true: false
     }
 }
 

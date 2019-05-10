@@ -18,10 +18,12 @@
                         <v-flex md6>
 
                             <v-text-field label="Destination" v-model="vacation.destination"></v-text-field>
+                            <small class="text-danger" v-if="errors.destination">{{errors.destination[0]}}</small>
                         </v-flex>
                         <v-flex md5 class="ml-2">
 
                             <v-text-field label="Cost" v-model="vacation.cost"></v-text-field>
+                            <small class="text-danger" v-if="errors.cost">{{errors.cost[0]}}</small>
                         </v-flex>
                     </v-layout>
                     <v-layout row wrap class="pa-3">
@@ -30,14 +32,16 @@
                                 <v-text-field :value="vacation.start"  slot="activator" label="Start Date" prepend-icon="date_range"></v-text-field>
                                 <v-date-picker v-model="vacation.start" ></v-date-picker>
                             </v-menu>
-
+                            <v-spacer></v-spacer>
+                            <small class="text-danger" v-if="errors.start">{{errors.start[0]}}</small>
                         </v-flex>
                         <v-flex md5>
                             <v-menu>
                                 <v-text-field :value="vacation.end"  slot="activator" label="End Date" prepend-icon="date_range"></v-text-field>
                                 <v-date-picker v-model="vacation.end" ></v-date-picker>
                             </v-menu>
-
+                            <v-spacer></v-spacer>
+                            <small class="text-danger" v-if="errors.end">{{errors.end[0]}}</small>
                         </v-flex>
                     </v-layout>
                     <v-layout row wrap class="pa-3">
@@ -47,16 +51,19 @@
                                     label="Status"
                                     v-model="vacation.status"
                             ></v-select>
+                            <small class="text-danger" v-if="errors.status">{{errors.status[0]}}</small>
                         </v-flex>
                     </v-layout>
                     <v-layout row wrap class="pa-3">
                         <v-flex md6>
 
                             <v-text-field label="Adults" v-model="vacation.adults"></v-text-field>
+                            <small class="text-danger" v-if="errors.adults">{{errors.adults[0]}}</small>
                         </v-flex>
                         <v-flex md5 class="ml-2">
 
                             <v-text-field label="Children" v-model="vacation.children"></v-text-field>
+                            <small class="text-danger" v-if="errors.children">{{errors.children[0]}}</small>
                         </v-flex>
                     </v-layout>
                     <v-layout row wrap class="pa-3">
@@ -120,6 +127,7 @@
                                     value="Romantic"
                                     hide-details
                             ></v-checkbox>
+                            <small class="text-danger" v-if="errors.activities">{{errors.activities[0]}}</small>
                         </v-flex>
 
                     </v-layout>
@@ -251,7 +259,7 @@
                         this.vacation = {destination:null,start:null,end:null,adults:null,children:null,activities:[],cost:null}
                     })
                     .catch((errors)=>{
-                        this.errors = errors.response.data
+                        this.errors = errors.response.data.errors
                     })
 
             },
