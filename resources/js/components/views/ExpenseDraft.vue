@@ -1,6 +1,6 @@
 <template>
     <div class="mt-5">
-        <h1>Expenses Drafts Here</h1>
+        <h1>Expenses Drafts </h1>
         <v-container>
 
                 <v-container fluid class="pa-2 grid-list-1">

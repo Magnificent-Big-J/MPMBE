@@ -2473,80 +2473,60 @@ __webpack_require__.r(__webpack_exports__);
   name: "Dashboard",
   data: function data() {
     return {
-      expenses: [{
-        name: 'Car Insurance',
-        category: 'Installment',
-        amount: '1523',
-        status: 'paid'
-      }, {
-        name: 'House Hold 1',
-        category: 'Black Tax',
-        amount: '1000',
-        status: 'paid'
-      }, {
-        name: 'House Hold 2',
-        category: 'Installment',
-        amount: '1000',
-        status: 'paid'
-      }, {
-        name: 'Food and Groceries',
-        category: 'Installment',
-        amount: '1523',
-        status: 'outstanding'
-      }, {
-        name: 'Helper',
-        category: 'Consumer Debt',
-        amount: '800',
-        status: 'onprogress'
-      }, {
-        name: 'Car',
-        category: 'Consumer Debt',
-        amount: '5000',
-        status: 'paid'
-      }, {
-        name: 'Petrol',
-        category: 'Consumer Debt',
-        amount: '3000',
-        status: 'paid'
-      }, {
-        name: 'Medical Aid',
-        category: 'Health Care',
-        amount: '1523',
-        status: 'paid'
-      }, {
-        name: 'Pension Fund',
-        category: 'Savings',
-        amount: '1523',
-        status: 'paid'
-      }],
-      labels: ['Car Insurance', 'House Hold 1', 'House Hold 3', 'Food and Groceries', 'Helper', 'Car', 'Petrol', 'Medical Aid', 'Pension Fund'],
+      dashData: {},
+      expenses: [],
+      labels: [],
       datasets: [{
-        label: 'March',
-        data: [1523, 1000, 1000, 1523, 800, 4000, 4000, 2000, 1523],
-        backgroundColor: 'blue',
-        borderColor: 'blue',
+        label: null,
+        data: [],
+        backgroundColor: '#3cba9f',
+        borderColor: '#3cba9f',
         fill: false,
         pointStyle: 'line'
       }, {
-        label: 'April',
-        data: [1523, 1000, 1000, 1523, 800, 5000, 3000, 1523, 1200],
-        backgroundColor: 'green',
-        borderColor: 'green',
+        label: null,
+        data: [],
+        backgroundColor: '#3e95cd',
+        borderColor: '#3e95cd',
         fill: false
       }],
       options: {
         title: {
           display: true,
           position: "bottom",
-          text: 'Expenses Overview'
+          text: 'Two Months Expenses Overview'
         }
       }
     };
+  },
+  methods: {
+    get_dashboardData: function get_dashboardData() {
+      var _this = this;
+
+      axios.get('/api/dashboard').then(function (response) {
+        _this.dashData = response.data;
+        _this.expenses = _this.dashData.expenses;
+      });
+    },
+    get_graphData: function get_graphData() {
+      var _this2 = this;
+
+      axios.get('/api/graphData').then(function (response) {
+        _this2.labels = response.data.labels;
+        _this2.datasets[0].data = response.data.data1;
+        _this2.datasets[1].data = response.data.data2;
+        _this2.datasets[0].label = response.data.label1;
+        _this2.datasets[1].label = response.data.label2;
+      })["catch"](function (error) {});
+    }
   },
   created: function created() {
     if (!User.loggedIn()) {
       this.$router.push("/");
     }
+
+    this.get_dashboardData();
+    this.get_graphData();
   }
 });
 
@@ -3151,23 +3131,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "OverviewAnalytics",
   data: function data() {
     return {
-      labels: ['Car Insurance', 'House Hold 1', 'House Hold 3', 'Food and Groceries', 'Helper', 'Car', 'Petrol', 'Medical Aid', 'Pension Fund'],
+      overview: {},
+      labels: [],
       datasets: [{
-        label: 'March',
-        data: [1523, 1000, 1000, 1523, 800, 4000, 4000, 2000, 1523],
-        backgroundColor: 'blue',
-        borderColor: 'blue',
+        label: null,
+        data: [],
+        backgroundColor: '#3cba9f',
+        borderColor: '#3cba9f',
         fill: false,
-        pointStyle: 'line'
+        pointStyle: 'bar'
       }, {
-        label: 'April',
-        data: [1523, 1000, 1000, 1523, 800, 5000, 3000, 1523, 1200],
-        backgroundColor: 'green',
-        borderColor: 'green',
+        label: null,
+        data: [],
+        backgroundColor: '#3e95cd',
+        borderColor: '#3e95cd',
         fill: false
       }],
       options: {
@@ -3179,10 +3161,33 @@ __webpack_require__.r(__webpack_exports__);
       }
     };
   },
+  methods: {
+    overViewData: function overViewData() {
+      var _this = this;
+
+      axios.get('/api/overview').then(function (response) {
+        _this.overview = response.data;
+      })["catch"](function (error) {});
+    },
+    get_graphData: function get_graphData() {
+      var _this2 = this;
+
+      axios.get('/api/graphData').then(function (response) {
+        _this2.labels = response.data.labels;
+        _this2.datasets[0].data = response.data.data1;
+        _this2.datasets[1].data = response.data.data2;
+        _this2.datasets[0].label = response.data.label1;
+        _this2.datasets[1].label = response.data.label2;
+      })["catch"](function (error) {});
+    }
+  },
   created: function created() {
     if (!User.loggedIn()) {
       this.$router.push("/");
     }
+
+    this.overViewData();
+    this.get_graphData();
   }
 });
 
@@ -71070,7 +71075,7 @@ var render = function() {
     "div",
     { staticClass: "mt-5" },
     [
-      _c("h1", [_vm._v("Budget Here")]),
+      _c("h1", [_vm._v("Budget ")]),
       _vm._v(" "),
       _c(
         "v-snackbar",
@@ -71685,7 +71690,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "mt-5" }, [
-    _c("h1", [_vm._v("Dashboard Here")]),
+    _c("h1", [_vm._v("Dashboard")]),
     _vm._v(" "),
     _c(
       "div",
@@ -71730,7 +71735,9 @@ var render = function() {
                         _c("div", { staticClass: "v-card__text" }, [
                           _c("div", { staticClass: "layout" }, [
                             _c("div", { staticClass: "flex xs8 caption" }, [
-                              _c("span", [_vm._v("R40000 ")])
+                              _c("span", [
+                                _vm._v("R" + _vm._s(_vm.dashData.budget))
+                              ])
                             ]),
                             _vm._v(" "),
                             _c(
@@ -71770,7 +71777,11 @@ var render = function() {
                         _c("div", { staticClass: "v-card__text" }, [
                           _c("div", { staticClass: "layout" }, [
                             _c("div", { staticClass: "flex xs8 caption" }, [
-                              _c("span", [_vm._v("23 ")])
+                              _c("span", [
+                                _vm._v(
+                                  _vm._s(_vm.dashData.completeExpense) + " "
+                                )
+                              ])
                             ]),
                             _vm._v(" "),
                             _c(
@@ -71810,7 +71821,9 @@ var render = function() {
                         _c("div", { staticClass: "v-card__text" }, [
                           _c("div", { staticClass: "layout" }, [
                             _c("div", { staticClass: "flex xs8 caption" }, [
-                              _c("span", [_vm._v("12 ")])
+                              _c("span", [
+                                _vm._v(_vm._s(_vm.dashData.outstanding) + " ")
+                              ])
                             ]),
                             _vm._v(" "),
                             _c(
@@ -71859,13 +71872,21 @@ var render = function() {
                         _c("div", { staticClass: "v-card__text" }, [
                           _c("div", { staticClass: "layout" }, [
                             _c("div", { staticClass: "flex xs8 caption" }, [
-                              _c("span", [_vm._v("2 ")])
+                              _c("span", [
+                                _vm._v(_vm._s(_vm.dashData.noVacation) + " ")
+                              ])
                             ]),
                             _vm._v(" "),
                             _c(
                               "div",
                               { staticClass: "flex xs4 text-xs-right" },
-                              [_vm._v("Cost: R35000"), _c("span")]
+                              [
+                                _vm._v(
+                                  "Cost: R" +
+                                    _vm._s(_vm.dashData.vacationAmount)
+                                ),
+                                _c("span")
+                              ]
                             )
                           ])
                         ])
@@ -71899,13 +71920,21 @@ var render = function() {
                         _c("div", { staticClass: "v-card__text" }, [
                           _c("div", { staticClass: "layout" }, [
                             _c("div", { staticClass: "flex xs8 caption" }, [
-                              _c("span", [_vm._v("14 ")])
+                              _c("span", [
+                                _vm._v(_vm._s(_vm.dashData.noUplanned) + " ")
+                              ])
                             ]),
                             _vm._v(" "),
                             _c(
                               "div",
                               { staticClass: "flex xs4 text-xs-right" },
-                              [_vm._v("Cost: R11000"), _c("span")]
+                              [
+                                _vm._v(
+                                  "Cost: R" +
+                                    _vm._s(_vm.dashData.unplannedAmount)
+                                ),
+                                _c("span")
+                              ]
                             )
                           ])
                         ])
@@ -71939,7 +71968,9 @@ var render = function() {
                         _c("div", { staticClass: "v-card__text" }, [
                           _c("div", { staticClass: "layout" }, [
                             _c("div", { staticClass: "flex xs8 caption" }, [
-                              _c("span", [_vm._v("R2000 ")])
+                              _c("span", [
+                                _vm._v("R" + _vm._s(_vm.dashData.savings) + " ")
+                              ])
                             ]),
                             _vm._v(" "),
                             _c(
@@ -71967,13 +71998,15 @@ var render = function() {
                     _c(
                       "v-card-text",
                       [
-                        _c("chartjs-line", {
-                          attrs: {
-                            labels: _vm.labels,
-                            datasets: _vm.datasets,
-                            option: _vm.options
-                          }
-                        })
+                        _vm.labels.length > 0
+                          ? _c("chartjs-line", {
+                              attrs: {
+                                labels: _vm.labels,
+                                datasets: _vm.datasets,
+                                option: _vm.options
+                              }
+                            })
+                          : _vm._e()
                       ],
                       1
                     )
@@ -72101,7 +72134,7 @@ var render = function() {
     "div",
     { staticClass: "mt-5" },
     [
-      _c("h1", [_vm._v("Expenses Drafts Here")]),
+      _c("h1", [_vm._v("Expenses Drafts ")]),
       _vm._v(" "),
       _c(
         "v-container",
@@ -72673,7 +72706,7 @@ var render = function() {
     "div",
     { staticClass: "mt-5" },
     [
-      _c("h1", [_vm._v("Expenses Here")]),
+      _c("h1", [_vm._v("Expenses ")]),
       _vm._v(" "),
       _c(
         "v-snackbar",
@@ -73200,7 +73233,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "mt-5" }, [
-    _c("h1", [_vm._v("Overview Analytics Here")]),
+    _c("h1", [_vm._v("Overview Analytics")]),
     _vm._v(" "),
     _c(
       "div",
@@ -73233,7 +73266,9 @@ var render = function() {
                     _c("div", { staticClass: "v-card__text" }, [
                       _c("div", { staticClass: "layout" }, [
                         _c("div", { staticClass: "flex xs8 caption" }, [
-                          _c("span", [_vm._v("R40000  ")])
+                          _c("span", [
+                            _vm._v("R" + _vm._s(_vm.overview.budget) + "  ")
+                          ])
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "flex xs4 text-xs-right" }, [
@@ -73269,7 +73304,11 @@ var render = function() {
                     _c("div", { staticClass: "v-card__text" }, [
                       _c("div", { staticClass: "layout" }, [
                         _c("div", { staticClass: "flex xs8 caption" }, [
-                          _c("span", [_vm._v("R350000 ")])
+                          _c("span", [
+                            _vm._v(
+                              "R" + _vm._s(_vm.overview.totalExpense) + " "
+                            )
+                          ])
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "flex xs4 text-xs-right" }, [
@@ -73305,7 +73344,9 @@ var render = function() {
                     _c("div", { staticClass: "v-card__text" }, [
                       _c("div", { staticClass: "layout" }, [
                         _c("div", { staticClass: "flex xs8 caption" }, [
-                          _c("span", [_vm._v("R5000 ")])
+                          _c("span", [
+                            _vm._v("R" + _vm._s(_vm.overview.balance) + " ")
+                          ])
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "flex xs4 text-xs-right" }, [
@@ -73322,13 +73363,25 @@ var render = function() {
               "v-card",
               { staticClass: "mt-2 pa-3" },
               [
-                _c("chartjs-line", {
-                  attrs: {
-                    labels: _vm.labels,
-                    datasets: _vm.datasets,
-                    option: _vm.options
-                  }
-                })
+                _vm.labels.length > 0
+                  ? _c("chartjs-line", {
+                      attrs: {
+                        labels: _vm.labels,
+                        datasets: _vm.datasets,
+                        option: _vm.options
+                      }
+                    })
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.labels.length > 0
+                  ? _c("chartjs-bar", {
+                      attrs: {
+                        labels: _vm.labels,
+                        datasets: _vm.datasets,
+                        option: _vm.options
+                      }
+                    })
+                  : _vm._e()
               ],
               1
             )
@@ -73366,7 +73419,7 @@ var render = function() {
     "div",
     { staticClass: "mt-5" },
     [
-      _c("h1", [_vm._v("Vacations Here")]),
+      _c("h1", [_vm._v("Vacations ")]),
       _vm._v(" "),
       _c(
         "v-snackbar",
@@ -114865,6 +114918,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuetify__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuetify__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _router_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./router/router */ "./resources/js/router/router.js");
 /* harmony import */ var _helpers_user__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./helpers/user */ "./resources/js/helpers/user.js");
+/* harmony import */ var _helpers_Exception__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./helpers/Exception */ "./resources/js/helpers/Exception.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -114879,6 +114933,7 @@ window.EventBus = new Vue();
 
 
 
+
 __webpack_require__(/*! chart.js */ "./node_modules/chart.js/dist/Chart.js");
 
 __webpack_require__(/*! hchs-vue-charts */ "./node_modules/hchs-vue-charts/dist/vue-charts.min.js");
@@ -114886,6 +114941,7 @@ __webpack_require__(/*! hchs-vue-charts */ "./node_modules/hchs-vue-charts/dist/
 Vue.use(VueCharts);
 Vue.use(vuetify__WEBPACK_IMPORTED_MODULE_0___default.a);
 window.User = _helpers_user__WEBPACK_IMPORTED_MODULE_2__["default"];
+window.Exception = _helpers_Exception__WEBPACK_IMPORTED_MODULE_3__["default"];
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -115800,6 +115856,52 @@ function () {
 }();
 
 /* harmony default export */ __webpack_exports__["default"] = (AppStorage = new AppStorage());
+
+/***/ }),
+
+/***/ "./resources/js/helpers/Exception.js":
+/*!*******************************************!*\
+  !*** ./resources/js/helpers/Exception.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _user__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./user */ "./resources/js/helpers/user.js");
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+var Exception =
+/*#__PURE__*/
+function () {
+  function Exception() {
+    _classCallCheck(this, Exception);
+  }
+
+  _createClass(Exception, [{
+    key: "handle",
+    value: function handle(error) {
+      this.isExpired(error.response.data.error);
+    }
+  }, {
+    key: "isExpired",
+    value: function isExpired(error) {
+      if (error == 'Token is expired') {
+        _user__WEBPACK_IMPORTED_MODULE_0__["default"].logout();
+      }
+    }
+  }]);
+
+  return Exception;
+}();
+
+/* harmony default export */ __webpack_exports__["default"] = (Exception = new Exception());
 
 /***/ }),
 

@@ -1,6 +1,6 @@
 <template>
     <div class="mt-5">
-        <h1>Vacations Here</h1>
+        <h1>Vacations </h1>
         <v-snackbar v-model="snackbar" :timeout="4000" top color="success">
             <span>{{message}}</span>
             <v-btn

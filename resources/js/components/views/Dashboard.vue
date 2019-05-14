@@ -1,6 +1,6 @@
 <template>
     <div class="mt-5">
-        <h1>Dashboard Here</h1>
+        <h1>Dashboard</h1>
 
         <div class="container fluid pa-0 grid-list-xl">
             <v-card>
@@ -16,7 +16,7 @@
                             </div>
                             <div class="v-card v-sheet v-sheet--tile theme--light red base white--text">
                                 <div class="v-card__text"><div class="layout">
-                                    <div class="flex xs8 caption"><span>R40000&nbsp;</span><!----></div>
+                                    <div class="flex xs8 caption"><span>R{{dashData.budget}}</span><!----></div>
                                     <div class="flex xs4 text-xs-right"><span></span></div>
                                 </div>
                                 </div>
@@ -29,7 +29,7 @@
                             </div>
                             <div class="v-card v-sheet v-sheet--tile theme--light pink base white--text">
                                 <div class="v-card__text"><div class="layout">
-                                    <div class="flex xs8 caption"><span>23&nbsp;</span><!----></div>
+                                    <div class="flex xs8 caption"><span>{{dashData.completeExpense}}&nbsp;</span><!----></div>
                                     <div class="flex xs4 text-xs-right"><span></span></div>
                                 </div>
                                 </div>
@@ -42,7 +42,7 @@
                             </div>
                             <div class="v-card v-sheet v-sheet--tile theme--light light-blue base white--text">
                                 <div class="v-card__text"><div class="layout">
-                                    <div class="flex xs8 caption"><span>12&nbsp;</span><!----></div>
+                                    <div class="flex xs8 caption"><span>{{dashData.outstanding}}&nbsp;</span><!----></div>
                                     <div class="flex xs4 text-xs-right"><span></span></div>
                                 </div>
                                 </div>
@@ -58,8 +58,8 @@
                             </div>
                             <div class="v-card v-sheet v-sheet--tile theme--light deep-orange base white--text">
                                 <div class="v-card__text"><div class="layout">
-                                    <div class="flex xs8 caption"><span>2&nbsp;</span><!----></div>
-                                    <div class="flex xs4 text-xs-right">Cost: R35000<span></span></div>
+                                    <div class="flex xs8 caption"><span>{{dashData.noVacation}}&nbsp;</span><!----></div>
+                                    <div class="flex xs4 text-xs-right">Cost: R{{dashData.vacationAmount}}<span></span></div>
                                 </div>
                                 </div>
                             </div>
@@ -71,8 +71,8 @@
                             </div>
                             <div class="v-card v-sheet v-sheet--tile theme--light amber  base white--text">
                                 <div class="v-card__text"><div class="layout">
-                                    <div class="flex xs8 caption"><span>14&nbsp;</span><!----></div>
-                                    <div class="flex xs4 text-xs-right">Cost: R11000<span></span></div>
+                                    <div class="flex xs8 caption"><span>{{dashData.noUplanned}}&nbsp;</span><!----></div>
+                                    <div class="flex xs4 text-xs-right">Cost: R{{dashData.unplannedAmount}}<span></span></div>
                                 </div>
                                 </div>
                             </div>
@@ -84,7 +84,7 @@
                             </div>
                             <div class="v-card v-sheet v-sheet--tile theme--light teal base white--text">
                                 <div class="v-card__text"><div class="layout">
-                                    <div class="flex xs8 caption"><span>R2000&nbsp;</span><!----></div>
+                                    <div class="flex xs8 caption"><span>R{{dashData.savings}}&nbsp;</span><!----></div>
                                     <div class="flex xs4 text-xs-right"><span></span></div>
                                 </div>
                                 </div>
@@ -97,7 +97,7 @@
                             <div class="headline pa-0">Two Months Overview</div>
                         </v-card-title>
                         <v-card-text>
-                            <chartjs-line :labels="labels" :datasets="datasets" :option="options"></chartjs-line>
+                            <chartjs-line v-if="labels.length > 0" :labels="labels" :datasets="datasets" :option="options"></chartjs-line>
                         </v-card-text>
                     </v-card>
                     <v-card class="mt-2 pa-3" >
@@ -145,32 +145,23 @@
     export default {
         name: "Dashboard",
         data(){return{
-            expenses:[
-                {name:'Car Insurance',category:'Installment',amount:'1523',status:'paid'},
-                {name:'House Hold 1',category:'Black Tax',amount:'1000',status:'paid'},
-                {name:'House Hold 2',category:'Installment',amount:'1000',status:'paid'},
-                {name:'Food and Groceries',category:'Installment',amount:'1523',status:'outstanding'},
-                {name:'Helper',category:'Consumer Debt',amount:'800',status:'onprogress'},
-                {name:'Car',category:'Consumer Debt',amount:'5000',status:'paid'},
-                {name:'Petrol',category:'Consumer Debt',amount:'3000',status:'paid'},
-                {name:'Medical Aid',category:'Health Care',amount:'1523',status:'paid'},
-                {name:'Pension Fund',category:'Savings',amount:'1523',status:'paid'},
-            ],
-            labels:['Car Insurance','House Hold 1','House Hold 3','Food and Groceries','Helper','Car','Petrol','Medical Aid','Pension Fund'],
+            dashData:{},
+            expenses:[],
+            labels:[],
             datasets:[
                 {
-                    label:'March',
-                    data:[1523,1000,1000,1523,800,4000,4000,2000,1523],
-                    backgroundColor:'blue',
-                    borderColor:'blue',
+                    label:null,
+                    data:[],
+                    backgroundColor:'#3cba9f',
+                    borderColor:'#3cba9f',
                     fill:false,
                     pointStyle:'line'
                 },
                 {
-                    label:'April',
-                    data:[1523,1000,1000,1523,800,5000,3000,1523,1200],
-                    backgroundColor:'green',
-                    borderColor:'green',
+                    label:null,
+                    data:[],
+                    backgroundColor:'#3e95cd',
+                    borderColor:'#3e95cd',
                     fill:false
                 }
             ],
@@ -178,14 +169,40 @@
                 title:{
                     display:true,
                     position:"bottom",
-                    text:'Expenses Overview'
+                    text:'Two Months Expenses Overview'
                 }
-            }
+            },
+
         }},
+        methods:{
+            get_dashboardData(){
+                axios.get('/api/dashboard')
+                    .then((response)=>{
+                        this.dashData = response.data
+                        this.expenses = this.dashData.expenses
+                    })
+            },
+            get_graphData(){
+                axios.get('/api/graphData')
+                    .then((response)=>{
+                        this.labels = response.data.labels
+
+                        this.datasets[0].data = response.data.data1
+                        this.datasets[1].data = response.data.data2
+                        this.datasets[0].label = response.data.label1
+                        this.datasets[1].label = response.data.label2
+                    })
+                    .catch((error)=>{
+
+                    })
+            }
+        },
         created() {
             if(!User.loggedIn()){
                 this.$router.push("/")
             }
+            this.get_dashboardData()
+            this.get_graphData()
         }
     }
 </script>

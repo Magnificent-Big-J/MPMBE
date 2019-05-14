@@ -22,6 +22,9 @@ Route::get('getList','CategoryController@get_categories');
 Route::resource('budgets','BudgetController');
 Route::resource('vacations','VacationController');
 Route::resource('expenses','ExpenseController');
+Route::get('overview','DataController@getData');
+Route::get('graphData','DataController@graphData');
+Route::get('dashboard','DataController@dashboard');
 
 Route::group([
 
@@ -36,3 +39,4 @@ Route::group([
     Route::post('me', 'AuthController@me');
 
 });
+Route::get('test','DataController@getData');

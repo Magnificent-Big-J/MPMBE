@@ -13,11 +13,14 @@ window.EventBus = new Vue()
 import Vuetify from 'vuetify'
 import router from './router/router'
 import User from  './helpers/user'
+import Exception from  './helpers/Exception'
 require('chart.js')
 require('hchs-vue-charts')
 Vue.use(VueCharts)
 Vue.use(Vuetify)
 window.User = User
+window.Exception = Exception
+
 
 /**
  * The following block of code may be used to automatically register your
