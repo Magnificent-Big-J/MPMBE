@@ -183,6 +183,10 @@
                         this.pagination.current = response.data.meta.current_page
                         this.pagination.total = response.data.meta.last_page
                     })
+                    .catch((error)=>{
+
+                        Exception.isExpired(error.response.data.error)
+                    })
             },
             onPageChange(){
                 this.get_budgets()

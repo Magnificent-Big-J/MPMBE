@@ -9,6 +9,7 @@ import Budget from '../components/views/Budget.vue'
 import ExpenseDraft from '../components/views/ExpenseDraft.vue'
 import Login from '../components/views/Login.vue'
 import Admin from  '../components/Admin.vue'
+import Social from '../components/views/Social.vue'
 
 Vue.use(VueRouter)
 
@@ -26,6 +27,7 @@ const routes = [
             {path:'/vacations',component:Vacations},
             {path:'/budget',component:Budget},
             {path:'/draft',component:ExpenseDraft},
+            {path:'/social',component:Social},
         ]
     }
 

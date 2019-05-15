@@ -54,6 +54,7 @@
                 {icon:'flight',text:'Vacations', route:'/vacations'},
                 {icon:'money',text:'Budget', route:'/budget'},
                 {icon:'assessment',text:'Expense Draft', route:'/draft'},
+                {icon:'account_balance_wallet',text:'Social Saving Monthly', route:'/social'},
 
             ]
         }},

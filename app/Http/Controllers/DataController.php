@@ -61,14 +61,23 @@ class DataController extends Controller
             $savngs = $b;
             $amount = $a;
         }
+
+        $noUnplanned = 0;
+        $unplannedAmount = 0;
         $completedExpense = Expense::TotalExpense()->where('status','Paid')->count();
         $outstanding = Expense::TotalExpense()->where('status','Outstanding')->whereOr('status','Onprogress')->count();
         $noVacation = Vacation::where('status','Going')->count();
         $vacationAmount = Vacation::where('status','Going')->sum('cost');
-        $unPlannedId = Category::where('name','Unplanned')->pluck('id')[0];
-        $noUnplanned = Expense::TotalExpense()->where('category_id',$unPlannedId)->count();
-        $unplannedAmount = Expense::TotalExpense()->where('category_id',$unPlannedId)->sum('amount');
+        $unPlannedId = Category::where('name','Unplanned')->pluck('id');
+
+        if(count($unPlannedId)){
+            $unPlannedId = $unPlannedId[0];
+            $noUnplanned = Expense::TotalExpense()->where('category_id',$unPlannedId)->count();
+            $unplannedAmount = Expense::TotalExpense()->where('category_id',$unPlannedId)->sum('amount');
+        }
+
         $expenses = Expense::TotalExpense()->get();
+
 
         return ['budget'=>$amount, 'savings'=>$savngs, 'completeExpense'=>$completedExpense,
                 'outstanding'=>$outstanding, 'noVacation'=>$noVacation,'vacationAmount'=>$vacationAmount,

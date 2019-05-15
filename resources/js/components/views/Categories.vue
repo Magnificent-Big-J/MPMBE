@@ -119,9 +119,10 @@
             submit(){
                 axios.post('/api/categories',this.category)
                     .then((response)=>{
-                        this.categories.push(response.data)
+                        this.categories.push(response.data.data)
                         this.message = "Category Successfully Added"
                         this.snackbar = true
+                        this.category = {name:null,status:null}
                     })
                     .catch((error)=>{
                         this.errors = error.response.data.errors
@@ -141,6 +142,10 @@
                         this.categories = response.data.data
                         this.pagination.current = response.data.meta.current_page
                         this.pagination.total = response.data.meta.last_page
+                    })
+                    .catch((error)=>{
+
+                        Exception.isExpired(error.response.data.error)
                     })
             },
             onPageChange(){

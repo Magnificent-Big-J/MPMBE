@@ -1887,6 +1887,10 @@ __webpack_require__.r(__webpack_exports__);
         icon: 'assessment',
         text: 'Expense Draft',
         route: '/draft'
+      }, {
+        icon: 'account_balance_wallet',
+        text: 'Social Saving Monthly',
+        route: '/social'
       }]
     };
   },
@@ -2118,6 +2122,8 @@ __webpack_require__.r(__webpack_exports__);
         _this4.budgets = response.data.data;
         _this4.pagination.current = response.data.meta.current_page;
         _this4.pagination.total = response.data.meta.last_page;
+      })["catch"](function (error) {
+        Exception.isExpired(error.response.data.error);
       });
     },
     onPageChange: function onPageChange() {
@@ -2274,10 +2280,14 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios.post('/api/categories', this.category).then(function (response) {
-        _this2.categories.push(response.data);
+        _this2.categories.push(response.data.data);
 
         _this2.message = "Category Successfully Added";
         _this2.snackbar = true;
+        _this2.category = {
+          name: null,
+          status: null
+        };
       })["catch"](function (error) {
         _this2.errors = error.response.data.errors;
       });
@@ -2300,6 +2310,8 @@ __webpack_require__.r(__webpack_exports__);
         _this4.categories = response.data.data;
         _this4.pagination.current = response.data.meta.current_page;
         _this4.pagination.total = response.data.meta.last_page;
+      })["catch"](function (error) {
+        Exception.isExpired(error.response.data.error);
       });
     },
     onPageChange: function onPageChange() {
@@ -2517,7 +2529,9 @@ __webpack_require__.r(__webpack_exports__);
         _this2.datasets[1].data = response.data.data2;
         _this2.datasets[0].label = response.data.label1;
         _this2.datasets[1].label = response.data.label2;
-      })["catch"](function (error) {});
+      })["catch"](function (error) {
+        Exception.isExpired(error.response.data.error);
+      });
     }
   },
   created: function created() {
@@ -2982,6 +2996,8 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/api/getList ').then(function (response) {
         _this5.categories = response.data.data;
+      })["catch"](function (error) {
+        Exception.isExpired(error.response.data.error);
       });
     },
     onPageChange: function onPageChange() {
@@ -3178,7 +3194,9 @@ __webpack_require__.r(__webpack_exports__);
         _this2.datasets[1].data = response.data.data2;
         _this2.datasets[0].label = response.data.label1;
         _this2.datasets[1].label = response.data.label2;
-      })["catch"](function (error) {});
+      })["catch"](function (error) {
+        Exception.isExpired(error.response.data.error);
+      });
     }
   },
   created: function created() {
@@ -3188,6 +3206,213 @@ __webpack_require__.r(__webpack_exports__);
 
     this.overViewData();
     this.get_graphData();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Social.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/Social.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "Social",
+  data: function data() {
+    return {
+      social: {
+        amount: null,
+        date: null,
+        name: null
+      },
+      options: ['Honey', 'Mom'],
+      socials: {},
+      editable: false,
+      message: null,
+      snackbar: false,
+      pagination: {
+        current: 1,
+        total: 0
+      },
+      index: null,
+      errors: {}
+    };
+  },
+  methods: {
+    edit: function edit(i) {
+      this.editable = true;
+      this.social = this.socials[i];
+      this.index = i;
+    },
+    update: function update() {
+      var _this = this;
+
+      axios.put('/api/socials/' + this.socials[this.index].id, this.social).then(function (response) {
+        _this.editable = false;
+        _this.social = {
+          amount: null,
+          date: null,
+          name: null
+        };
+        _this.message = response.data.message;
+        _this.snackbar = true;
+      });
+    },
+    submit: function submit() {
+      var _this2 = this;
+
+      axios.post('/api/socials', this.social).then(function (response) {
+        _this2.socials.push(response.data.data);
+
+        _this2.message = "Social Successfully Added";
+        _this2.snackbar = true;
+        _this2.social = {
+          amount: null,
+          date: null,
+          name: null
+        };
+      })["catch"](function (error) {
+        _this2.errors = error.response.data.errors;
+      });
+    },
+    destroy: function destroy(i) {
+      var _this3 = this;
+
+      axios["delete"]('/api/socials/' + this.socials[i].id).then(function (response) {
+        _this3.message = response.data.message;
+
+        _this3.socials.splice(i, 1);
+
+        _this3.snackbar = true;
+      });
+    },
+    get_socials: function get_socials() {
+      var _this4 = this;
+
+      axios.get('/api/socials?page=' + this.pagination.current).then(function (response) {
+        _this4.socials = response.data.data;
+        _this4.pagination.current = response.data.meta.current_page;
+        _this4.pagination.total = response.data.meta.last_page;
+      })["catch"](function (error) {
+        Exception.isExpired(error.response.data.error);
+      });
+    },
+    onPageChange: function onPageChange() {
+      this.get_socials();
+    }
+  },
+  created: function created() {
+    if (!User.loggedIn()) {
+      this.$router.push("/");
+    }
+
+    this.get_socials();
   }
 });
 
@@ -3506,6 +3731,8 @@ __webpack_require__.r(__webpack_exports__);
         _this4.vacations = response.data.data;
         _this4.pagination.current = response.data.meta.current_page;
         _this4.pagination.total = response.data.meta.last_page;
+      })["catch"](function (error) {
+        Exception.isExpired(error.response.data.error);
       });
     },
     onPageChange: function onPageChange() {
@@ -73400,6 +73627,317 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Social.vue?vue&type=template&id=3f132b19&scoped=true&":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/Social.vue?vue&type=template&id=3f132b19&scoped=true& ***!
+  \***************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "mt-5" },
+    [
+      _c("h1", [_vm._v("Social Monthly Savings")]),
+      _vm._v(" "),
+      _c(
+        "v-snackbar",
+        {
+          attrs: { timeout: 4000, top: "", color: "success" },
+          model: {
+            value: _vm.snackbar,
+            callback: function($$v) {
+              _vm.snackbar = $$v
+            },
+            expression: "snackbar"
+          }
+        },
+        [
+          _c("span", [_vm._v(_vm._s(_vm.message))]),
+          _vm._v(" "),
+          _c(
+            "v-btn",
+            {
+              attrs: { color: "pink", flat: "" },
+              on: {
+                click: function($event) {
+                  _vm.snackbar = false
+                }
+              }
+            },
+            [_vm._v("\n            Close\n        ")]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-container",
+        [
+          _c(
+            "v-card",
+            [
+              _c("v-card-title", [_c("h2", [_vm._v("Manage Social")])]),
+              _vm._v(" "),
+              _c(
+                "v-card-text",
+                [
+                  _c(
+                    "v-form",
+                    { staticClass: "px-3" },
+                    [
+                      _c("v-text-field", {
+                        attrs: { label: "Amount" },
+                        model: {
+                          value: _vm.social.amount,
+                          callback: function($$v) {
+                            _vm.$set(_vm.social, "amount", $$v)
+                          },
+                          expression: "social.amount"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.errors.amount
+                        ? _c("small", { staticClass: "text-danger" }, [
+                            _vm._v(_vm._s(_vm.errors.amount[0]))
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("v-select", {
+                        attrs: { items: _vm.options, label: "Person" },
+                        model: {
+                          value: _vm.social.name,
+                          callback: function($$v) {
+                            _vm.$set(_vm.social, "name", $$v)
+                          },
+                          expression: "social.name"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.errors.name
+                        ? _c("small", { staticClass: "text-danger" }, [
+                            _vm._v(_vm._s(_vm.errors.name[0]))
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-menu",
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              slot: "activator",
+                              value: _vm.social.date,
+                              label: "Social Date",
+                              "prepend-icon": "date_range"
+                            },
+                            slot: "activator"
+                          }),
+                          _vm._v(" "),
+                          _c("v-date-picker", {
+                            model: {
+                              value: _vm.social.date,
+                              callback: function($$v) {
+                                _vm.$set(_vm.social, "date", $$v)
+                              },
+                              expression: "social.date"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _vm.errors.date
+                        ? _c("small", { staticClass: "text-danger" }, [
+                            _vm._v(_vm._s(_vm.errors.date[0]))
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _vm.editable
+                        ? _c(
+                            "v-btn",
+                            {
+                              staticClass: "warning mx-0 mt-3",
+                              on: { click: _vm.update }
+                            },
+                            [_vm._v("Update Social")]
+                          )
+                        : _c(
+                            "v-btn",
+                            {
+                              staticClass: "primary mx-0 mt-3",
+                              on: { click: _vm.submit }
+                            },
+                            [_vm._v("Add Social")]
+                          )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card",
+                    { staticClass: "pa-4 mt-2" },
+                    [
+                      _c(
+                        "v-layout",
+                        { attrs: { row: "", wrap: "" } },
+                        [
+                          _c("v-flex", { attrs: { xs6: "", md3: "" } }, [
+                            _c("div", { staticClass: "subheadline" }, [
+                              _vm._v("Amount")
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("v-flex", { attrs: { xs6: "", md3: "" } }, [
+                            _c("div", { staticClass: "subheadline" }, [
+                              _vm._v("Date")
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("v-flex", { attrs: { xs6: "", md3: "" } }, [
+                            _c("div", { staticClass: "subheadline" }, [
+                              _vm._v("Person")
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c("v-flex", { attrs: { xs6: "", md3: "" } }, [
+                            _c("div", { staticClass: "subheadline" }, [
+                              _vm._v("Actions")
+                            ])
+                          ])
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _vm._l(_vm.socials, function(social, index) {
+                        return _c(
+                          "v-layout",
+                          { key: social.id, attrs: { row: "", wrap: "" } },
+                          [
+                            _c("v-flex", { attrs: { xs6: "", md3: "" } }, [
+                              _c("div", [_vm._v(_vm._s(social.amount))])
+                            ]),
+                            _vm._v(" "),
+                            _c("v-flex", { attrs: { xs6: "", md3: "" } }, [
+                              _c("div", [_vm._v(_vm._s(social.date))])
+                            ]),
+                            _vm._v(" "),
+                            _c("v-flex", { attrs: { xs6: "", md3: "" } }, [
+                              _c("div", [_vm._v(_vm._s(social.name))])
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "v-flex",
+                              { attrs: { xs6: "", md3: "" } },
+                              [
+                                _c(
+                                  "v-card-actions",
+                                  [
+                                    _c(
+                                      "v-btn",
+                                      { attrs: { small: "", icon: "" } },
+                                      [
+                                        _c(
+                                          "v-icon",
+                                          {
+                                            attrs: { color: "orange" },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.edit(index)
+                                              }
+                                            }
+                                          },
+                                          [_vm._v("edit")]
+                                        )
+                                      ],
+                                      1
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-btn",
+                                      { attrs: { small: "", icon: "" } },
+                                      [
+                                        _c(
+                                          "v-icon",
+                                          {
+                                            attrs: { color: "red" },
+                                            on: {
+                                              click: function($event) {
+                                                return _vm.destroy(index)
+                                              }
+                                            }
+                                          },
+                                          [_vm._v("delete")]
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c("v-divider")
+                          ],
+                          1
+                        )
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c("v-pagination", {
+                            attrs: { length: _vm.pagination.total },
+                            on: { input: _vm.onPageChange },
+                            model: {
+                              value: _vm.pagination.current,
+                              callback: function($$v) {
+                                _vm.$set(_vm.pagination, "current", $$v)
+                              },
+                              expression: "pagination.current"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    2
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Vacations.vue?vue&type=template&id=01932e8c&scoped=true&":
 /*!******************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/views/Vacations.vue?vue&type=template&id=01932e8c&scoped=true& ***!
@@ -115716,6 +116254,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/views/Social.vue":
+/*!**************************************************!*\
+  !*** ./resources/js/components/views/Social.vue ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Social_vue_vue_type_template_id_3f132b19_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Social.vue?vue&type=template&id=3f132b19&scoped=true& */ "./resources/js/components/views/Social.vue?vue&type=template&id=3f132b19&scoped=true&");
+/* harmony import */ var _Social_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Social.vue?vue&type=script&lang=js& */ "./resources/js/components/views/Social.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Social_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Social_vue_vue_type_template_id_3f132b19_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Social_vue_vue_type_template_id_3f132b19_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "3f132b19",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/views/Social.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/views/Social.vue?vue&type=script&lang=js&":
+/*!***************************************************************************!*\
+  !*** ./resources/js/components/views/Social.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Social_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Social.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Social.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Social_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/views/Social.vue?vue&type=template&id=3f132b19&scoped=true&":
+/*!*********************************************************************************************!*\
+  !*** ./resources/js/components/views/Social.vue?vue&type=template&id=3f132b19&scoped=true& ***!
+  \*********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Social_vue_vue_type_template_id_3f132b19_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Social.vue?vue&type=template&id=3f132b19&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/views/Social.vue?vue&type=template&id=3f132b19&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Social_vue_vue_type_template_id_3f132b19_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Social_vue_vue_type_template_id_3f132b19_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/views/Vacations.vue":
 /*!*****************************************************!*\
   !*** ./resources/js/components/views/Vacations.vue ***!
@@ -116072,6 +116679,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_views_ExpenseDraft_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../components/views/ExpenseDraft.vue */ "./resources/js/components/views/ExpenseDraft.vue");
 /* harmony import */ var _components_views_Login_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../components/views/Login.vue */ "./resources/js/components/views/Login.vue");
 /* harmony import */ var _components_Admin_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../components/Admin.vue */ "./resources/js/components/Admin.vue");
+/* harmony import */ var _components_views_Social_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../components/views/Social.vue */ "./resources/js/components/views/Social.vue");
+
 
 
 
@@ -116113,6 +116722,9 @@ var routes = [{
   }, {
     path: '/draft',
     component: _components_views_ExpenseDraft_vue__WEBPACK_IMPORTED_MODULE_8__["default"]
+  }, {
+    path: '/social',
+    component: _components_views_Social_vue__WEBPACK_IMPORTED_MODULE_11__["default"]
   }]
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({

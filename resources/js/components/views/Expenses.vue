@@ -201,6 +201,10 @@
                         this.categories = response.data.data
 
                     })
+                    .catch((error)=>{
+
+                        Exception.isExpired(error.response.data.error)
+                    })
             }            ,
             onPageChange(){
                 this.get_expenses()
