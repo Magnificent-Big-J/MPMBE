@@ -17,7 +17,14 @@
                     <h2>Manage Social</h2>
                 </v-card-title>
                 <v-card-text>
-                    <v-form class="px-3">
+                    <div class="heading float-right">
+                        <span class="subheading">Honey R{{honey}}</span>
+                        <v-spacer></v-spacer>
+                        <span class="subheading">Mom R{{mom}}</span>
+
+                    </div>
+
+                    <v-form class="px-3 mt-2">
                         <v-text-field label="Amount" v-model="social.amount">
 
                         </v-text-field>
@@ -92,7 +99,9 @@
                                     :length="pagination.total"
                                     @input="onPageChange"
                             ></v-pagination>
+
                         </v-card-actions>
+
                     </v-card>
                 </v-card-text>
             </v-card>
@@ -115,7 +124,9 @@
                 total:0
             },
             index:null,
-            errors:{}
+            errors:{},
+            mom:null,
+            honey:null,
         }},
         methods:{
             edit(i){
@@ -130,6 +141,7 @@
                         this.social = {amount:null,date:null,name:null}
                         this.message = response.data.message
                         this.snackbar = true
+                        this.getMoney()
                     })
             },
             submit(){
@@ -139,6 +151,7 @@
                         this.message = "Social Successfully Added"
                         this.snackbar = true
                         this.social = {amount:null,date:null,name:null}
+                        this.getMoney()
                     })
                     .catch((error)=>{
                         this.errors = error.response.data.errors
@@ -150,6 +163,7 @@
                         this.message = response.data.message
                         this.socials.splice(i,1)
                         this.snackbar = true
+                        this.getMoney()
                     })
             },
             get_socials(){
@@ -164,6 +178,15 @@
                         Exception.isExpired(error.response.data.error)
                     })
             },
+            getMoney(){
+                axios.get('/api/getMoney')
+                    .then((response)=>{
+                        this.honey = response.data.honey
+                        this.mom = response.data.mom
+                    })
+            }
+
+            ,
             onPageChange(){
                 this.get_socials()
             }
@@ -173,6 +196,7 @@
                 this.$router.push("/")
             }
             this.get_socials()
+            this.getMoney()
         }
     }
 </script>

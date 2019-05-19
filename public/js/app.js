@@ -3071,11 +3071,18 @@ __webpack_require__.r(__webpack_exports__);
         email: null,
         password: null
       },
-      errorMess: null
+      error: null
     };
   },
   methods: {
     login: function login() {
+      var _this = this;
+
+      axios.post('/api/auth/login', this.form).then(function (response) {
+        User.login(response);
+      })["catch"](function (error) {
+        _this.error = error.response.data.error;
+      });
       User.login(this.form);
     }
   }
@@ -3322,6 +3329,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Social",
   data: function data() {
@@ -3341,7 +3357,9 @@ __webpack_require__.r(__webpack_exports__);
         total: 0
       },
       index: null,
-      errors: {}
+      errors: {},
+      mom: null,
+      honey: null
     };
   },
   methods: {
@@ -3362,6 +3380,8 @@ __webpack_require__.r(__webpack_exports__);
         };
         _this.message = response.data.message;
         _this.snackbar = true;
+
+        _this.getMoney();
       });
     },
     submit: function submit() {
@@ -3377,6 +3397,8 @@ __webpack_require__.r(__webpack_exports__);
           date: null,
           name: null
         };
+
+        _this2.getMoney();
       })["catch"](function (error) {
         _this2.errors = error.response.data.errors;
       });
@@ -3390,6 +3412,8 @@ __webpack_require__.r(__webpack_exports__);
         _this3.socials.splice(i, 1);
 
         _this3.snackbar = true;
+
+        _this3.getMoney();
       });
     },
     get_socials: function get_socials() {
@@ -3403,6 +3427,14 @@ __webpack_require__.r(__webpack_exports__);
         Exception.isExpired(error.response.data.error);
       });
     },
+    getMoney: function getMoney() {
+      var _this5 = this;
+
+      axios.get('/api/getMoney').then(function (response) {
+        _this5.honey = response.data.honey;
+        _this5.mom = response.data.mom;
+      });
+    },
     onPageChange: function onPageChange() {
       this.get_socials();
     }
@@ -3413,6 +3445,7 @@ __webpack_require__.r(__webpack_exports__);
     }
 
     this.get_socials();
+    this.getMoney();
   }
 });
 
@@ -73349,7 +73382,7 @@ var render = function() {
                               _c(
                                 "v-form",
                                 [
-                                  _vm.errorMess
+                                  _vm.error
                                     ? _c(
                                         "v-alert",
                                         {
@@ -73691,8 +73724,25 @@ var render = function() {
                 "v-card-text",
                 [
                   _c(
+                    "div",
+                    { staticClass: "heading float-right" },
+                    [
+                      _c("span", { staticClass: "subheading" }, [
+                        _vm._v("Honey R" + _vm._s(_vm.honey))
+                      ]),
+                      _vm._v(" "),
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c("span", { staticClass: "subheading" }, [
+                        _vm._v("Mom R" + _vm._s(_vm.mom))
+                      ])
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
                     "v-form",
-                    { staticClass: "px-3" },
+                    { staticClass: "px-3 mt-2" },
                     [
                       _c("v-text-field", {
                         attrs: { label: "Amount" },
@@ -116594,15 +116644,8 @@ function () {
 
   _createClass(User, [{
     key: "login",
-    value: function login(form) {
-      var _this = this;
-
-      axios.post('/api/auth/login', form).then(function (response) {
-        _this.responseAfterLogin(response);
-      })["catch"](function (error) {
-        _this.errors = error.response;
-        _AppStorage__WEBPACK_IMPORTED_MODULE_0__["default"].loginError(error.response.data.error);
-      });
+    value: function login(response) {
+      this.responseAfterLogin(response);
     }
   }, {
     key: "responseAfterLogin",

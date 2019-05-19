@@ -23,6 +23,8 @@ Route::resource('budgets','BudgetController');
 Route::resource('vacations','VacationController');
 Route::resource('expenses','ExpenseController');
 Route::resource('socials','SocialController');
+Route::get('getMoney','SocialController@getMoney');
+
 Route::get('overview','DataController@getData');
 Route::get('graphData','DataController@graphData');
 Route::get('dashboard','DataController@dashboard');

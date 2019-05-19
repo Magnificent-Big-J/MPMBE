@@ -2,17 +2,8 @@ import AppStorage from './AppStorage'
 import Token from './Token'
 class User{
 
-    login(form){
-        axios.post('/api/auth/login',form)
-            .then((response)=>{
-                this.responseAfterLogin(response)
-
-            })
-            .catch((error)=>{
-                this.errors = error.response
-                AppStorage.loginError(error.response.data.error)
-
-            })
+    login(response){
+        this.responseAfterLogin(response)
     }
     responseAfterLogin(response){
         const access_token = response.data.access_token

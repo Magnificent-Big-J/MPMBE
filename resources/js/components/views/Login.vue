@@ -13,7 +13,7 @@
                             </v-toolbar>
                             <v-card-text>
                                 <v-form >
-                                    <v-alert v-if="errorMess"
+                                    <v-alert v-if="error"
                                             :value="true"
                                             type="error"
                                     >
@@ -41,11 +41,21 @@
         name: "Login",
         data(){return{
             form:{email:null,password:null},
-            errorMess:null
+            error:null
         }},
         methods:{
             login(){
+                axios.post('/api/auth/login',this.form)
+                    .then((response)=>{
+                        User.login(response)
+
+                    })
+                    .catch((error)=>{
+                        this.error = error.response.data.error
+
+                    })
                 User.login(this.form)
+
 
             },
 

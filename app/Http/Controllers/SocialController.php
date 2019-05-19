@@ -102,4 +102,12 @@ class SocialController extends Controller
 
         return response()->json(['message'=>'Social Successfully Deleted'],200);
     }
+    public function getMoney(){
+
+        $honey = Social::where('name','Honey')->sum('amount');
+        $mom = Social::where('name','Mom')->sum('amount');
+
+        return ['honey'=>$honey,'mom'=>$mom];
+
+    }
 }
