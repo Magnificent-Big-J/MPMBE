@@ -116601,7 +116601,7 @@ function () {
       var payload = this.payload(token);
 
       if (payload) {
-        return payload.iss == "http://127.0.0.1:8000/api/auth/login" ? true : false;
+        return payload.iss == "http://127.0.0.1:8000/api/auth/login" || "http://162.243.166.102/api/auth/login" ? true : false;
       }
 
       return false;
